@@ -22,7 +22,7 @@ app.use(session({
 const SPREADSHEET_ID = '1bNhlUVWnt43Pq1hqDALXbfGDVazD7VhaeKM58hBTsN0';
 
 const zonePasswords = {
-    'Ain shams': '754', 'Alexandria': '1234', 'Cairo_city_centr': '909', 
+    'Ain shams': '754', 'Alexandria': '1234', 'Cairo_city_centre': '909', 
     'Giza': '1568', 'Heliopolis': '2161', 'Ismalia city': '1122', 
     'Kafr el-sheikh': '3344', 'Maadi': '878', 'Mansoura': '5566', 
     'Mohandiseen': '1862', 'Nasr city': '2851', 'New damietta': '7788', 
