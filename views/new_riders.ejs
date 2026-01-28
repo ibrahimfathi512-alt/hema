@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { background: #f8fafb; font-family: 'Segoe UI', sans-serif; padding: 25px; }
+        .nav { background: white; padding: 15px 30px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 30px; }
+        .card { background: white; padding: 20px; border-radius: 15px; text-align: center; border-right: 6px solid #007bff; }
+        .table-container { width: 100%; overflow-x: auto; background: white; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #007bff; color: white; padding: 15px; }
+        td { padding: 12px; border-bottom: 1px solid #eee; text-align: center; }
+        .badge { padding: 5px 12px; border-radius: 20px; color: white; font-weight: bold; font-size: 0.85em; }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <h2 style="color: #007bff;">التعيينات الجديدة - <%= zone %></h2>
+        <a href="/dashboard" style="text-decoration:none; color:#007bff; font-weight:bold;">العودة 🏠</a>
+    </div>
+
+    <div class="stats-grid">
+        <div class="card"><h3>إجمالي التعيينات</h3><h2><%= stats.total %></h2></div>
+        <div class="card" style="border-right-color: #28a745;"><h3>استلم</h3><h2><%= stats.received %></h2></div>
+        <div class="card" style="border-right-color: #dc3545;"><h3>لم يستلم</h3><h2><%= stats.notReceived %></h2></div>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead><tr><% headers.forEach(h => { %> <th><%= h %></th> <% }) %></tr></thead>
+            <tbody>
+                <% riders.forEach(r => { %>
+                <tr>
+                    <% headers.forEach(h => { %>
+                        <td>
+                            <% if(h === 'الحاله') { 
+                                let status = r.get(h);
+                                let color = (status === 'استلم') ? '#28a745' : '#dc3545';
+                            %>
+                                <span class="badge" style="background: <%= color %>;"><%= status %></span>
+                            <% } else { %>
+                                <%= r.get(h) || '0' %>
+                            <% } %>
+                        </td>
+                    <% }) %>
+                </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
