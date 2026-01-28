@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>ردود التعيينات | <%= zone %></title>
+    <style>
+        body { background: #f0f2f5; font-family: 'Segoe UI', sans-serif; padding: 20px; }
+        .nav-header { background: white; padding: 15px 30px; border-radius: 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        .table-container { background: white; border-radius: 25px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #f8f9fa; padding: 15px; border-bottom: 2px solid #eee; text-align: center; }
+        td { padding: 12px; border-bottom: 1px solid #f0f0f0; text-align: center; }
+        .status-approved { background: #00ff00; color: black; font-weight: bold; padding: 5px 10px; border-radius: 5px; }
+        .btn-back { background: #ff5e00; color: white; padding: 8px 20px; border-radius: 15px; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="nav-header">
+        <div style="font-weight: bold; font-size: 1.2rem;">صفحة ردود التعيينات 📋</div>
+        <div style="color: #ff5e00;">زون: <%= zone %></div>
+        <a href="/dashboard" class="btn-back">العودة للرئيسية</a>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <% headers.forEach(h => { %> <th><%= h %></th> <% }) %>
+                </tr>
+            </thead>
+            <tbody>
+                <% responses.forEach(r => { %>
+                <tr>
+                    <% headers.forEach(h => { %>
+                        <td class="<%= r.get(h) === 'Approved & Created' ? 'status-approved' : '' %>">
+                            <%= r.get(h) %>
+                        </td>
+                    <% }) %>
+                </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
