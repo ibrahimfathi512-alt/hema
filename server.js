@@ -185,7 +185,7 @@ app.get('/rejected-inquiry', async (req, res) => {
         name: row.get('الاسم'),
         phone: row.get('رقم الهاتف'),
         national_id: row.get('الرقم القومي'),
-        supervisor: row.get('رفع التعيين بواسطه'),
+        supervisor: row.get('اسم المشرف'),
         reason: row.get('سبب الرفض')
     };
 });
