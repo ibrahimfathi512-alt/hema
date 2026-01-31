@@ -102,7 +102,6 @@ app.get('/dashboard', async (req, res) => {
     } catch (e) { res.status(500).send("خطأ في التحميل: " + e.message); }
 });
 
-// 3. صفحة تحليل التارجت (تم إضافة cleanData هنا لحل الخطأ)
 app.get('/targets', async (req, res) => {
     if (!req.session.userZone) return res.redirect('/');
     try {
@@ -126,7 +125,6 @@ app.get('/targets', async (req, res) => {
     } catch (e) { res.send("تأكد من وجود شيت باسم 'التارجت'"); }
 });
 
-// 4. صفحة التعيينات الجديدة
 app.get('/new-riders', async (req, res) => {
     if (!req.session.userZone) return res.redirect('/');
     try {
@@ -144,7 +142,6 @@ app.get('/new-riders', async (req, res) => {
     } catch (e) { res.send("تأكد من وجود شيت باسم 'تعيينات الشهر'"); }
 });
 
-// 5. صفحة ردود الأوردات
 app.get('/order-responses', async (req, res) => {
     if (!req.session.userZone) return res.redirect('/');
     try {
@@ -156,23 +153,49 @@ app.get('/order-responses', async (req, res) => {
     } catch (e) { res.send("تأكد من وجود شيت باسم 'ردود الأوردات'"); }
 });
 
-// --- الصفحة الجديدة: ردود التعيينات ---
 app.get('/new-riders-responses', async (req, res) => {
     if (!req.session.userZone) return res.redirect('/');
     try {
         const doc = await getDoc();
         const sheet = doc.sheetsByTitle['ردود التعيينات']; 
         const rows = await sheet.getRows();
-        
-        // تصفية حسب عمود 'Zone Name' كما يظهر في صورك
         const myResponses = rows.filter(r => r.get('Zone Name') === req.session.userZone);
-        
         res.render('new_riders_responses', { 
             responses: myResponses, 
             zone: req.session.userZone, 
             headers: sheet.headerValues 
         });
     } catch (e) { res.send("خطأ: تأكد من وجود شيت باسم 'ردود التعيينات'."); }
+});
+
+app.get('/rejected-inquiry', async (req, res) => {
+    // تم تصحيح التحقق هنا ليكون userZone بدلاً من userId
+    if (!req.session.userZone) return res.redirect('/');
+
+    try {
+        const doc = await getDoc();
+        const sheet = doc.sheetsByTitle['مرفوضين استعلام']; 
+        const rows = await sheet.getRows();
+
+        const allRejectedData = rows.map(row => {
+    return {
+        date: row.get('التاريخ'),
+        office: row.get('مكتب'),
+        prep_office: row.get('مقر التحضير'),
+        name: row.get('الاسم'),
+        phone: row.get('رقم الهاتف'),
+        national_id: row.get('الرقم القومي'),
+        supervisor: row.get('رفع التعيين بواسطه'),
+        reason: row.get('سبب الرفض')
+    };
+});
+        
+
+        res.render('rejected_inquiry', { data: allRejectedData }); 
+    } catch (e) {
+        console.error("Error fetching all rejected data:", e);
+        res.status(500).send("حدث خطأ أثناء جلب كافة بيانات المرفوضين، تأكد من وجود شيت باسم 'مرفوضين استعلام'");
+    }
 });
 
 app.get('/download', async (req, res) => {
