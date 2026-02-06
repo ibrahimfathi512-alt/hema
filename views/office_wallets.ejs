@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>مديونيات المكتب | Talabat</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root { --primary: #6c5ce7; --bg: #f0f2f5; }
+        body { background: var(--bg); font-family: 'Segoe UI', sans-serif; padding: 20px; margin: 0; }
+        .header-section { background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .controls-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+        .input-group { position: relative; }
+        .input-group i { position: absolute; right: 15px; top: 15px; color: var(--primary); z-index: 5; }
+        input, select { width: 100%; padding: 12px 45px 12px 15px; border-radius: 10px; border: 1px solid #ddd; outline: none; box-sizing: border-box; background: white; }
+        .table-card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: var(--primary); color: white; padding: 15px; position: sticky; top: 0; font-size: 0.9rem; }
+        td { padding: 12px; text-align: center; border-bottom: 1px solid #f0f0f0; font-weight: 500; }
+        .hidden { display: none !important; }
+        #noResults { padding: 40px; text-align: center; color: #636e72; display: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="header-section">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h2 style="color:var(--primary); margin:0;"><i class="fa-solid fa-wallet"></i> مديونيات المكتب - <%= zone %></h2>
+            <a href="/dashboard" style="text-decoration:none; color:var(--primary); font-weight:bold;">العودة للرئيسية 🏠</a>
+        </div>
+        
+        <div class="controls-grid">
+            <div class="input-group">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" placeholder="ابحث بكود المندوب أو الاسم...">
+            </div>
+            <div class="input-group">
+                <i class="fa-solid fa-filter"></i>
+                <select id="dateSelect" onchange="applyFilters()">
+                    <option value="">كل التواريخ</option>
+                    <% 
+                        // استخراج التواريخ الفريدة بعد معالجة الدمج
+                        let uniqueDates = [...new Set(wallets.map(w => w.Date))].filter(d => d && d !== '0');
+                        uniqueDates.forEach(date => { 
+                    %>
+                        <option value="<%= date %>"><%= date %></option>
+                    <% }) %>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-card">
+        <table id="walletTable">
+            <thead>
+                <tr><% headers.forEach(h => { %> <th><%= h %></th> <% }) %></tr>
+            </thead>
+            <tbody id="tableBody">
+                <% wallets.forEach(row => { %>
+                <tr class="data-row">
+                    <% headers.forEach(h => { %>
+                    <td class="cell-<%= h %>"><%= row[h] || '0' %></td>
+                    <% }) %>
+                </tr>
+                <% }) %>
+            </tbody>
+        </table>
+        <div id="noResults">❌ لا توجد بيانات مطابقة لهذا البحث أو التاريخ</div>
+    </div>
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const dateSelect = document.getElementById('dateSelect');
+        const rows = Array.from(document.getElementsByClassName('data-row'));
+        const noResults = document.getElementById('noResults');
+
+        function applyFilters() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const selectedDate = dateSelect.value.trim();
+
+            let visibleCount = 0;
+
+            // استخدام requestAnimationFrame لضمان عدم تهنيج المتصفح
+            window.requestAnimationFrame(() => {
+                rows.forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    const dateCell = row.querySelector('.cell-Date').textContent.trim(); 
+
+                    const matchesSearch = searchTerm === "" || text.includes(searchTerm);
+                    const matchesDate = selectedDate === "" || dateCell === selectedDate;
+
+                    if (matchesSearch && matchesDate) {
+                        row.classList.remove('hidden');
+                        visibleCount++;
+                    } else {
+                        row.classList.add('hidden');
+                    }
+                });
+                
+                noResults.style.display = visibleCount === 0 ? "block" : "none";
+            });
+        }
+
+        let timeout = null;
+        searchInput.addEventListener('input', () => {
+            clearTimeout(timeout);
+            timeout = setTimeout(applyFilters, 250);
+        });
+    </script>
+</body>
+</html>

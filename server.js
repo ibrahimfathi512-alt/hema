@@ -49,9 +49,11 @@ async function getDoc() {
 }
 
 const cleanData = (val) => {
-    if (val === undefined || val === null || ['NA', '#N/A', 'N/A', ''].includes(val)) return 0;
-    let res = parseFloat(val.toString().replace(/,/g, ''));
-    return isNaN(res) ? val : res;
+    if (val === undefined || val === null || val === '') return 0;
+    let strVal = val.toString().trim();
+    if (['NA', '#N/A', 'N/A'].includes(strVal)) return 0;
+    let res = parseFloat(strVal.replace(/,/g, '').replace(/[^0-9.-]/g, ''));
+    return isNaN(res) ? 0 : res;
 };
 
 // --- المسارات (Routes) ---
@@ -100,6 +102,40 @@ app.get('/dashboard', async (req, res) => {
         };
         res.render('dashboard', { riders: myRiders, zone: req.session.userZone, stats, headers: sheet.headerValues, cleanData });
     } catch (e) { res.status(500).send("خطأ في التحميل: " + e.message); }
+});
+
+// المسار المحدث لصفحة محافظ المكتب لمعالجة الخلايا المدمجة (Merged Cells)
+app.get('/office-wallets', async (req, res) => {
+    if (!req.session.userZone) return res.redirect('/');
+    try {
+        const doc = await getDoc();
+        const sheet = doc.sheetsByTitle['جميع المحافظ']; 
+        if (!sheet) throw new Error("شيت 'جميع المحافظ' غير موجود");
+        
+        const rows = await sheet.getRows();
+        
+        // منطق التعبئة التلقائية للتواريخ المدمجة (Auto-fill Down)
+        let lastSeenDate = "";
+        const processedWallets = rows.map(row => {
+            let rowObj = row.toObject();
+            let currentDate = row.get('Date');
+            
+            // إذا كانت الخلية فارغة (بسبب الدمج) استخدم آخر تاريخ مسجل
+            if (!currentDate || currentDate === '0' || currentDate === '') {
+                rowObj.Date = lastSeenDate;
+            } else {
+                rowObj.Date = currentDate;
+                lastSeenDate = currentDate;
+            }
+            return rowObj;
+        });
+
+        res.render('office_wallets', { 
+            wallets: processedWallets, 
+            zone: req.session.userZone, 
+            headers: sheet.headerValues 
+        });
+    } catch (e) { res.status(500).send(e.message); }
 });
 
 app.get('/targets', async (req, res) => {
@@ -169,32 +205,26 @@ app.get('/new-riders-responses', async (req, res) => {
 });
 
 app.get('/rejected-inquiry', async (req, res) => {
-    // تم تصحيح التحقق هنا ليكون userZone بدلاً من userId
     if (!req.session.userZone) return res.redirect('/');
-
     try {
         const doc = await getDoc();
         const sheet = doc.sheetsByTitle['مرفوضين استعلام']; 
         const rows = await sheet.getRows();
-
         const allRejectedData = rows.map(row => {
-    return {
-        date: row.get('التاريخ'),
-        office: row.get('مكتب'),
-        prep_office: row.get('مقر التحضير'),
-        name: row.get('الاسم'),
-        phone: row.get('رقم الهاتف'),
-        national_id: row.get('الرقم القومي'),
-        supervisor: row.get('اسم المشرف'),
-        reason: row.get('سبب الرفض')
-    };
-});
-        
-
+            return {
+                date: row.get('التاريخ'),
+                office: row.get('مكتب'),
+                prep_office: row.get('مقر التحضير'),
+                name: row.get('الاسم'),
+                phone: row.get('رقم الهاتف'),
+                national_id: row.get('الرقم القومي'),
+                supervisor: row.get('اسم المشرف'),
+                reason: row.get('سبب الرفض')
+            };
+        });
         res.render('rejected_inquiry', { data: allRejectedData }); 
     } catch (e) {
-        console.error("Error fetching all rejected data:", e);
-        res.status(500).send("حدث خطأ أثناء جلب كافة بيانات المرفوضين، تأكد من وجود شيت باسم 'مرفوضين استعلام'");
+        res.status(500).send("خطأ في شيت 'مرفوضين استعلام'");
     }
 });
 

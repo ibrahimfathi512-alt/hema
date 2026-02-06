@@ -13,6 +13,7 @@
             --danger: #d63031;
             --bg: #f0f2f5;
             --locked-bg: #fff0f0;
+            --office: #6c5ce7; /* لون محافظ المكتب */
         }
 
         body { background: var(--bg); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
@@ -34,15 +35,15 @@
         .card.total { border-color: var(--secondary); }
         .card.shifts { border-color: var(--success); }
         .card.no-shifts { border-color: #636e72; }
-        /* كارت المحافظ المقفولة */
         .card.locked { border-color: var(--danger); background: #fff9f9; }
         .card.locked h2 { color: var(--danger); }
         .card.locked i { color: var(--danger); opacity: 0.15; }
 
-        .action-bar { display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap; }
-        .btn-action { padding: 12px 24px; border-radius: 12px; text-decoration: none; color: white; font-weight: bold; display: flex; align-items: center; gap: 10px; transition: 0.2s; border: none; cursor: pointer; font-size: 0.9rem; }
+        .action-bar { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
+        .btn-action { padding: 12px 20px; border-radius: 12px; text-decoration: none; color: white; font-weight: bold; display: flex; align-items: center; gap: 8px; transition: 0.2s; border: none; cursor: pointer; font-size: 0.85rem; }
+        .btn-action:hover { opacity: 0.9; transform: scale(1.02); }
 
-        .search-wrapper { flex-grow: 1; position: relative; }
+        .search-wrapper { flex-grow: 1; position: relative; min-width: 300px; }
         .search-wrapper input { width: 100%; padding: 12px 45px 12px 15px; border-radius: 12px; border: 1px solid #ddd; outline: none; box-sizing: border-box; }
         .search-wrapper i { position: absolute; right: 15px; top: 14px; color: #b2bec3; }
 
@@ -53,7 +54,6 @@
         th { background: #fafafa; color: #636e72; padding: 18px; font-size: 0.85rem; border-bottom: 2px solid #f0f0f0; }
         td { padding: 15px; text-align: center; border-bottom: 1px solid #f7f7f7; color: var(--secondary); }
 
-        /* ستايل القفل في الجدول */
         .wallet-locked-row { background-color: #fff5f5 !important; }
         .wallet-locked-cell { color: var(--danger) !important; font-weight: 800 !important; }
         .lock-badge { background: var(--danger); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; margin-right: 5px; }
@@ -99,11 +99,13 @@
         <div class="action-bar">
             <a href="/targets" class="btn-action" style="background: var(--primary);"><i class="fa-solid fa-chart-line"></i> تحليل التارجت</a>
             <a href="/new-riders" class="btn-action" style="background: #007bff;"><i class="fa-solid fa-user-plus"></i> التعيينات</a>
-            <a href="/new-riders-responses" class="btn-action" style="background: hsl(184, 73%, 46%);">📋 ردود التعيينات</a>
-           <a href="/rejected-inquiry" class="btn-action" style="background: #20c997; text-decoration: none; display: inline-flex; align-items: center; gap: 5px;">
-    <span>📋</span>
-    <span>مرفوضين استعلام</span>
-</a>
+            
+            <a href="/office-wallets" class="btn-action" style="background: var(--office);">
+                <i class="fa-solid fa-wallet"></i> محافظ المكتب
+            </a>
+
+            <a href="/new-riders-responses" class="btn-action" style="background: hsl(184, 73%, 46%);"><i class="fa-solid fa-clipboard-list"></i> ردود التعيينات</a>
+            <a href="/rejected-inquiry" class="btn-action" style="background: #20c997;"><i class="fa-solid fa-user-xmark"></i> مرفوضين استعلام</a>
             <a href="/order-responses" class="btn-action" style="background: #6c5ce7;"><i class="fa-solid fa-file-invoice"></i> ردود الأوردات</a>
             <a href="/download" class="btn-action" style="background: var(--success);"><i class="fa-solid fa-file-excel"></i> تحميل Excel</a>
             
