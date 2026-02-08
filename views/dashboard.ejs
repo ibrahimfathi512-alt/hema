@@ -3,370 +3,256 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Talabat Elite | Dashboard</title>
+    <title>Talabat Pro | AI Dashboard</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --primary: #ff5e00;
-            --dark-blue: #0f172a;
-            --glass: rgba(255, 255, 255, 0.03);
+            --primary-light: #ff8533;
+            --bg-gradient: radial-gradient(circle at top right, #1e293b, #070b14);
+            --sidebar-bg: rgba(15, 23, 42, 0.98);
+            --card-bg: rgba(255, 255, 255, 0.03);
             --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
             --success: #22c55e;
             --danger: #ef4444;
             --warning: #f1c40f;
             --sidebar-width: 260px;
         }
 
-        body {
-            background: radial-gradient(circle at top right, #1e293b, #070b14);
-            color: #f8fafc;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            margin: 0;
-            display: flex;
-            min-height: 100vh;
-            overflow-x: hidden;
+        [data-theme="light"] {
+            --bg-gradient: radial-gradient(circle at top right, #f1f5f9, #e2e8f0);
+            --sidebar-bg: rgba(255, 255, 255, 0.98);
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --glass-border: rgba(0, 0, 0, 0.1);
+            --text-main: #1e293b;
+            --text-dim: #64748b;
         }
 
-        /* Sidebar Responsive */
+        * { box-sizing: border-box; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        body { background: var(--bg-gradient); color: var(--text-main); font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; overflow-x: hidden; padding-bottom: 70px; }
+
+        /* Sidebar */
         .sidebar {
-            width: var(--sidebar-width);
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(20px);
-            border-left: 1px solid var(--glass-border);
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
-            position: fixed;
-            height: 100vh;
-            right: 0;
-            top: 0;
-            z-index: 1000;
-            transition: transform 0.3s ease;
+            width: var(--sidebar-width); background: var(--sidebar-bg); backdrop-filter: blur(20px);
+            border-left: 1px solid var(--glass-border); padding: 20px; display: flex;
+            flex-direction: column; position: fixed; height: 100vh; right: 0; z-index: 2000;
         }
+        .nav-item { color: var(--text-dim); text-decoration: none; padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 10px; margin-bottom: 5px; font-size: 0.9rem; }
+        .nav-item:hover, .nav-item.active { background: rgba(255, 94, 0, 0.1); color: var(--primary); }
 
-        .sidebar h2 { color: var(--primary); text-align: center; margin-bottom: 30px; text-shadow: 0 0 20px rgba(255,94,0,0.3); font-size: 1.5rem; }
+        /* Main Content */
+        .main-content { margin-right: var(--sidebar-width); flex: 1; padding: 20px; width: calc(100% - var(--sidebar-width)); }
 
-        .nav-item {
-            color: #94a3b8;
-            text-decoration: none;
-            padding: 12px 18px;
-            border-radius: 12px;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transition: 0.3s ease;
-            white-space: nowrap;
-        }
-
-        .nav-item:hover, .nav-item.active { background: rgba(255, 94, 0, 0.1); color: var(--primary); transform: translateX(-5px); }
-
-        /* Main Content Area Responsive */
-        .main-content { 
-            margin-right: var(--sidebar-width); 
-            flex: 1; 
-            padding: 20px; 
-            width: calc(100% - var(--sidebar-width));
-            transition: all 0.3s ease;
-        }
-
-        /* Mobile Adjustments */
         @media (max-width: 992px) {
-            .sidebar {
-                transform: translateX(100%); /* Hide sidebar on mobile by default */
-            }
-            .sidebar.active {
-                transform: translateX(0);
-            }
-            .main-content {
-                margin-right: 0;
-                width: 100%;
-                padding: 15px;
-            }
-            .welcome-card {
-                flex-direction: column;
-                text-align: center;
-                gap: 20px;
-            }
-            .welcome-card div {
-                text-align: center !important;
-            }
-            .clock { font-size: 1.8rem; }
+            .sidebar { transform: translateX(105%); }
+            .sidebar.active { transform: translateX(0); }
+            .main-content { margin-right: 0; width: 100%; }
         }
 
-        /* Menu Button for Mobile */
-        .mobile-nav-toggle {
-            display: none;
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: var(--primary);
-            color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            box-shadow: 0 4px 15px rgba(255, 94, 0, 0.4);
-            cursor: pointer;
-        }
-        
-        @media (max-width: 992px) {
-            .mobile-nav-toggle { display: flex; }
+        /* Top Header (Welcome & Clock) */
+        .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; background: var(--card-bg); padding: 20px; border-radius: 20px; border: 1px solid var(--glass-border); }
+        .clock-box { text-align: left; }
+        #clock { font-size: 1.8rem; font-weight: 800; color: var(--primary); }
+        #date { color: var(--text-dim); font-size: 0.9rem; }
+
+        /* Stats Grid */
+        .smart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 20px; }
+        .stat-card { background: var(--card-bg); border: 1px solid var(--glass-border); padding: 20px; border-radius: 20px; text-align: center; cursor: pointer; border-bottom: 4px solid transparent; }
+        .stat-card.active { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 10px 25px rgba(255, 94, 0, 0.2); }
+        .stat-card h2 { margin: 8px 0; font-size: 2rem; font-weight: 800; }
+
+        /* Floating Center Button (Mobile) */
+        .fab-center { 
+            position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%); 
+            width: 65px; height: 65px; background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 50%; display: none; justify-content: center; align-items: center; 
+            z-index: 3000; box-shadow: 0 15px 35px rgba(255, 94, 0, 0.5); color: #fff; 
+            font-size: 28px; cursor: pointer; border: 3px solid rgba(255,255,255,0.3);
+            animation: pulse-orange 2s infinite;
         }
 
-        .welcome-card {
-            background: linear-gradient(135deg, rgba(255,94,0,0.1) 0%, rgba(15, 23, 42, 0) 100%);
-            border: 1px solid var(--glass-border);
-            padding: 25px;
-            border-radius: 24px;
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        /* AI Chat Box */
+        .ai-chat-fab { position: fixed; bottom: 85px; left: 30px; width: 55px; height: 55px; background: #007bff; border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 3000; cursor: pointer; color: #fff; box-shadow: 0 10px 25px rgba(0,123,255,0.4); }
+        .chat-container { position: fixed; bottom: 155px; left: 30px; width: 320px; height: 450px; background: var(--sidebar-bg); border: 1px solid var(--glass-border); border-radius: 24px; display: none; flex-direction: column; z-index: 4000; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .chat-header { background: #007bff; padding: 15px; color: white; display: flex; justify-content: space-between; align-items: center; font-weight: bold; }
+        .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .msg { padding: 10px 15px; border-radius: 15px; max-width: 85%; font-size: 0.85rem; }
+        .msg.bot { background: rgba(255,255,255,0.05); align-self: flex-start; }
+        .msg.user { background: var(--primary); align-self: flex-end; }
+        .chat-input { padding: 15px; border-top: 1px solid var(--glass-border); display: flex; gap: 10px; }
+        .chat-input input { flex: 1; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 10px; padding: 10px; color: white; outline: none; }
 
-        .clock { font-size: 2.2rem; font-weight: 800; color: #fff; }
-        .date { color: var(--primary); font-weight: 600; margin-top: 5px; }
+        /* News Ticker Bottom Bar */
+        .news-ticker { position: fixed; bottom: 0; left: 0; width: 100%; background: #000; color: #fff; height: 45px; display: flex; align-items: center; z-index: 5000; overflow: hidden; border-top: 2px solid var(--primary); }
+        .ticker-title { background: var(--primary); padding: 0 15px; height: 100%; display: flex; align-items: center; font-weight: bold; font-size: 0.8rem; z-index: 2; white-space: nowrap; }
+        .ticker-wrap { flex: 1; overflow: hidden; }
+        .ticker-content { display: inline-block; white-space: nowrap; animation: ticker 45s linear infinite; }
+        @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        .ticker-item { display: inline-block; margin: 0 25px; font-size: 0.85rem; }
 
-        .smart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-bottom: 30px; }
-        .stat-card {
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            padding: 20px;
-            border-radius: 20px;
-            text-align: center;
-            transition: 0.4s;
-            cursor: pointer;
-        }
-        .stat-card h2 { font-size: 1.8rem; margin: 10px 0; font-weight: 800; }
-        
-        .chart-container { background: var(--glass); border: 1px solid var(--glass-border); padding: 15px; border-radius: 24px; height: 300px; }
+        /* Table Card */
+        .table-card { background: var(--card-bg); border-radius: 20px; overflow-x: auto; border: 1px solid var(--glass-border); }
+        table { width: 100%; border-collapse: collapse; min-width: 1000px; }
+        th { padding: 15px; color: var(--primary); background: rgba(0,0,0,0.1); cursor: pointer; text-align: center; font-size: 0.85rem; }
+        td { padding: 12px; border-bottom: 1px solid var(--glass-border); text-align: center; font-size: 0.85rem; }
 
-        .search-input {
-            width: 100%; padding: 12px 45px 12px 15px; border-radius: 12px;
-            border: 1px solid var(--glass-border); background: var(--glass);
-            color: white; font-size: 0.9rem; box-sizing: border-box;
-        }
-
-        /* Table Responsive */
-        .table-card { 
-            background: var(--glass); 
-            border-radius: 24px; 
-            overflow-x: auto; /* يسمح بالتمرير يميناً ويساراً في الموبايل */
-            border: 1px solid var(--glass-border); 
-        }
-        table { width: 100%; border-collapse: collapse; min-width: 600px; }
-        th { background: rgba(255,255,255,0.05); padding: 15px; font-size: 0.8rem; color: #f8fafc; }
-        td { padding: 12px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.02); font-size: 0.85rem; }
-
-        #toast-alert {
-            position: fixed; bottom: 80px; left: 20px; right: 20px; background: white; color: #000; padding: 15px;
-            border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: none; z-index: 10000;
-            border-right: 6px solid var(--danger);
-        }
+        @media (max-width: 992px) { .fab-center { display: flex; } }
+        @keyframes pulse-orange { 0% { box-shadow: 0 0 0 0 rgba(255, 94, 0, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(255, 94, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 94, 0, 0); } }
     </style>
 </head>
-<body>
+<body data-theme="dark">
 
-    <div class="mobile-nav-toggle" onclick="toggleSidebar()">
-        <i class="fa-solid fa-bars"></i>
-    </div>
+    <div class="fab-center" onclick="toggleSidebar()"><i class="fa-solid fa-plus"></i></div>
 
-    <div class="sidebar" id="sidebar">
-        <h2>TALABAT PRO</h2>
-        <a href="/dashboard" class="nav-item active"><i class="fa-solid fa-house"></i> الرئيسية</a>
-        <a href="/targets" class="nav-item"><i class="fa-solid fa-chart-line"></i> تحليل التارجت</a>
-        <a href="/office-wallets" class="nav-item"><i class="fa-solid fa-wallet"></i> محافظ المكتب</a>
-        <a href="/reconciliations" class="nav-item"><i class="fa-solid fa-handshake"></i> التصالحات</a>
-        <a href="/new-riders" class="nav-item"><i class="fa-solid fa-user-plus"></i> التعيينات</a>
-        <a href="/new-riders-responses" class="nav-item"><i class="fa-solid fa-clipboard-check"></i> ردود التعيينات</a>
-        <a href="/rejected-inquiry" class="nav-item"><i class="fa-solid fa-user-xmark"></i> المرفوضين</a>
-        <a href="/order-responses" class="nav-item"><i class="fa-solid fa-file-invoice"></i> ردود الأوردات</a>
-        <a href="/download" class="nav-item" style="color: var(--success);"><i class="fa-solid fa-file-excel"></i> تحميل Excel</a>
-        <div style="margin-top: auto;">
-            <a href="/logout" class="nav-item" style="color: var(--danger);"><i class="fa-solid fa-power-off"></i> خروج</a>
+    <div class="ai-chat-fab" onclick="toggleChat()"><i class="fa-solid fa-robot"></i></div>
+    <div class="chat-container" id="chatBox">
+        <div class="chat-header"><span>مساعد تطلبات الذكي 🤖</span><i class="fa-solid fa-xmark" onclick="toggleChat()" style="cursor:pointer"></i></div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="msg bot">أهلاً بك يا بطل! أنا مساعدك الذكي. يمكنني إخبارك بنسبة الحاجزين، عدد المديونين، أو إعطائك نصائح لتحسين أداء الزون. اسألني أي شيء!</div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="userInput" placeholder="اسألني عن المديونيات أو الشفتات..." onkeypress="if(event.key === 'Enter') sendMessage()">
+            <button onclick="sendMessage()" style="background:var(--primary); border:none; color:white; padding:8px 15px; border-radius:10px; cursor:pointer"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
     </div>
 
-    <div class="main-content">
-        <div class="welcome-card">
-            <div class="welcome-msg">
-                <h1>أهلاً بك يا بطل 🚀</h1>
-                <p style="color: #94a3b8; margin-top: 5px;">إليك ملخص أداء الزون ليومنا هذا</p>
+    <aside class="sidebar" id="sidebar">
+        <h2 style="color:var(--primary); text-align:center; letter-spacing:1px;">TALABAT PRO</h2>
+        <div class="theme-switch" onclick="toggleTheme()" style="cursor:pointer; padding:10px; background:var(--card-bg); border-radius:10px; margin-bottom:15px; display:flex; justify-content:space-between">
+            <span id="themeLabel">الوضع الداكن</span><i id="themeIcon" class="fa-solid fa-moon"></i>
+        </div>
+        <nav style="flex:1">
+            <a href="/dashboard" class="nav-item active"><i class="fa-solid fa-house"></i> الرئيسية</a>
+            <a href="/targets" class="nav-item"><i class="fa-solid fa-chart-line"></i> تحليل التارجت</a>
+            <a href="/office-wallets" class="nav-item"><i class="fa-solid fa-wallet"></i> محافظ المكتب</a>
+            <a href="/reconciliations" class="nav-item"><i class="fa-solid fa-handshake"></i> التصالحات</a>
+            <a href="/new-riders" class="nav-item"><i class="fa-solid fa-user-plus"></i> التعيينات</a>
+            <a href="/new-riders-responses" class="nav-item"><i class="fa-solid fa-clipboard-check"></i> ردود التعيينات</a>
+            <a href="/rejected-inquiry" class="nav-item"><i class="fa-solid fa-user-xmark"></i> المرفوضين</a>
+            <a href="/order-responses" class="nav-item"><i class="fa-solid fa-file-invoice"></i> ردود الأوردات</a>
+        </nav>
+        <div style="border-top:1px solid var(--glass-border); padding-top:10px">
+            <a href="/download" class="nav-item" style="color:var(--success)"><i class="fa-solid fa-file-excel"></i> تحميل Excel</a>
+            <a href="/logout" class="nav-item" style="color:var(--danger)"><i class="fa-solid fa-power-off"></i> خروج</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="top-header">
+            <div>
+                <h1 style="margin:0; font-size: 1.6rem;">أهلاً بك يا بطل 🚀</h1>
+                <p style="color: var(--text-dim); margin-top: 5px;">إليك ملخص أداء الزون ليومنا هذا</p>
             </div>
-            <div style="text-align: left;">
-                <div class="clock" id="clock">00:00:00</div>
-                <div class="date" id="date">جاري التحميل...</div>
+            <div class="clock-box">
+                <div id="clock">00:00:00</div>
+                <div id="date">جاري التحميل...</div>
             </div>
         </div>
 
         <div class="smart-grid">
-            <div class="stat-card" onclick="filterTable('all')">
-                <span style="color: #94a3b8;">إجمالي القوة</span>
-                <h2><%= stats.total %></h2>
-            </div>
-            <div class="stat-card" onclick="filterTable('hasShift')" style="border-bottom: 4px solid var(--success)">
-                <span style="color: var(--success);">حاجزين شيفت</span>
-                <h2 style="color: var(--success);"><%= stats.withShifts %></h2>
-            </div>
-            <div class="stat-card" onclick="filterTable('noShift')" style="border-bottom: 4px solid var(--warning)">
-                <span style="color: var(--warning);">بدون شيفت</span>
-                <h2 style="color: var(--warning);"><%= stats.noShifts %></h2>
-            </div>
-            <div class="stat-card" onclick="filterTable('highWallet')" style="border-bottom: 4px solid var(--danger)">
-                <span style="color: var(--danger);">محافظ مقفولة</span>
-                <h2 style="color: var(--danger);"><%= stats.highWallet %></h2>
-            </div>
-        </div>
-
-        <div class="analytics-grid">
-            <div class="chart-container">
-                <canvas id="mainChart"></canvas>
-            </div>
-        </div>
-
-        <div class="search-container" style="position:relative; margin-bottom: 20px;">
-            <i class="fa-solid fa-magnifying-glass" style="position:absolute; right:15px; top:50%; transform:translateY(-50%); color:#94a3b8;"></i>
-            <input type="text" id="searchInput" class="search-input" placeholder="بحث..." onkeyup="searchTable()">
+            <div class="stat-card active" onclick="applyFilter('all', this)"><span>إجمالي القوة</span><h2><%= stats.total %></h2></div>
+            <div class="stat-card" onclick="applyFilter('hasShift', this)" style="border-bottom-color: var(--success)"><span>حاجزين</span><h2 style="color:var(--success)"><%= stats.withShifts %></h2></div>
+            <div class="stat-card" onclick="applyFilter('noShift', this)" style="border-bottom-color: var(--warning)"><span>بدون شيفت</span><h2 style="color:var(--warning)"><%= stats.noShifts %></h2></div>
+            <div class="stat-card" onclick="applyFilter('highWallet', this)" style="border-bottom-color: var(--danger)"><span>مديونيات</span><h2 style="color:var(--danger)"><%= stats.highWallet %></h2></div>
         </div>
 
         <div class="table-card">
             <table id="tbl">
                 <thead>
-                    <tr>
-                        <% headers.forEach((h, index) => { %> 
-                            <th onclick="sortTable(<%= index %>)">
-                                <%= h %> <i class="fa-solid fa-sort"></i>
-                            </th> 
-                        <% }) %>
-                    </tr>
+                    <tr><% headers.forEach((h, index) => { %><th onclick="smartSort(<%= index %>)"><%= h %></th><% }) %></tr>
                 </thead>
-                <tbody>
-                    <% riders.forEach(r => { 
-                        let wVal = cleanData(r.get('المحفظه'));
-                        let isL = wVal > 1000;
-                    %>
-                    <tr data-wallet="<%= wVal %>" data-shifts="<%= cleanData(r.get('شيفتات الغد')) %>">
-                        <% headers.forEach(h => { 
-                            let val = r.get(h);
-                            let isW = (h === 'المحفظه');
-                        %>
-                        <td style="<%= (isW && isL) ? 'color: var(--danger); font-weight: bold;' : '' %>">
-                            <% if(isW && isL) { %> <span class="locked-badge">⚠️ مقفول</span> <% } %>
-                            <%= (val === 'N/A' || !val) ? '0' : val %>
-                        </td>
-                        <% }) %>
+                <tbody id="tableBody">
+                    <% riders.forEach(r => { %>
+                    <tr class="rider-row" data-wallet="<%= cleanData(r.get('المحفظه')) %>" data-shifts="<%= cleanData(r.get('شيفتات الغد')) %>">
+                        <% headers.forEach(h => { %> <td><%= r.get(h) || '0' %></td> <% }) %>
                     </tr>
                     <% }) %>
                 </tbody>
             </table>
         </div>
-    </div>
+    </main>
 
-    <div id="toast-alert">
-        <div style="display:flex; align-items:center; gap:10px;">
-            <i class="fa-solid fa-triangle-exclamation" style="font-size: 1.5rem; color: var(--danger);"></i>
-            <div>
-                <strong>تنبيه المديونيات!</strong><br>
-                <span style="font-size: 0.8rem;">يوجد <%= stats.highWallet %> محافظ مديونة.</span>
+    <div class="news-ticker">
+        <div class="ticker-title">نشرة التوصيات</div>
+        <div class="ticker-wrap">
+            <div class="ticker-content">
+                <span class="ticker-item"><i class="fa-solid fa-triangle-exclamation"></i> انتبه: يوجد <%= stats.highWallet %> محافظ مقفولة حالياً.</span>
+                <span class="ticker-item"><i class="fa-solid fa-lightbulb"></i> نصيحة: خلي المناديب تورد بانتظام علشان السوالب متتراكمش عليهم.</span>
+                <span class="ticker-item"><i class="fa-solid fa-clock"></i> نصيحة: خلي المناديب تحجز شيفتاتها بدري لضمان استقرار الزون.</span>
+                <span class="ticker-item"><i class="fa-solid fa-ban"></i> ممنوع: المندوب يحجز الشيفت يومي.. لازم الالتزام بالجدول المخطط.</span>
+                <span class="ticker-item"><i class="fa-solid fa-chart-line"></i> نسبة المندوبين بدون شيفتات اليوم: <%= ((stats.noShifts/stats.total)*100).toFixed(1) %>%.</span>
             </div>
         </div>
     </div>
 
     <script>
-        // فتح واغلاق القائمة في الموبايل
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('active');
-        }
-
-        // إغلاق السايدبار عند الضغط في أي مكان خارجها (للموبايل)
-        document.addEventListener('click', function(event) {
-            const sidebar = document.getElementById('sidebar');
-            const toggleBtn = document.querySelector('.mobile-nav-toggle');
-            if (window.innerWidth <= 992 && !sidebar.contains(event.target) && !toggleBtn.contains(event.target)) {
-                sidebar.classList.remove('active');
-            }
-        });
-
         function updateClock() {
             const now = new Date();
             document.getElementById('clock').innerText = now.toLocaleTimeString('ar-EG');
-            document.getElementById('date').innerText = now.toLocaleDateString('ar-EG', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+            document.getElementById('date').innerText = now.toLocaleDateString('ar-EG', { weekday: 'long', day: 'numeric', month: 'long' });
         }
-        setInterval(updateClock, 1000);
-        updateClock();
+        setInterval(updateClock, 1000); updateClock();
 
-        const ctxMain = document.getElementById('mainChart').getContext('2d');
-        new Chart(ctxMain, {
-            type: 'bar',
-            data: {
-                labels: ['إجمالي القوة', 'حاجزين', 'بدون شيفت', 'مقفولة'],
-                datasets: [{
-                    data: [<%= stats.total %>, <%= stats.withShifts %>, <%= stats.noShifts %>, <%= stats.highWallet %>],
-                    backgroundColor: ['#94a3b8', '#22c55e', '#f1c40f', '#ef4444'],
-                    borderRadius: 8
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
-                    x: { ticks: { color: '#94a3b8', font: { size: 10 } } }
-                }
-            }
-        });
-
-        function searchTable() {
-            const input = document.getElementById('searchInput');
-            const filter = input.value.toLowerCase();
-            const rows = document.querySelectorAll('#tbl tbody tr');
-            rows.forEach(row => {
-                row.style.display = row.textContent.toLowerCase().includes(filter) ? '' : 'none';
-            });
+        function toggleTheme() {
+            const b = document.body;
+            const isDark = b.getAttribute('data-theme') !== 'light';
+            b.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            document.getElementById('themeLabel').innerText = isDark ? 'الوضع الفاتح' : 'الوضع الداكن';
+            document.getElementById('themeIcon').className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
         }
 
-        let sortDirections = {};
-        function sortTable(columnIndex) {
-            const table = document.getElementById("tbl");
-            const tbody = table.querySelector("tbody");
-            const rows = Array.from(tbody.querySelectorAll("tr"));
-            sortDirections[columnIndex] = !sortDirections[columnIndex];
-            const isAscending = sortDirections[columnIndex];
-            rows.sort((a, b) => {
-                let cellA = a.children[columnIndex].innerText.replace('⚠️ مقفول', '').trim();
-                let cellB = b.children[columnIndex].innerText.replace('⚠️ مقفول', '').trim();
-                let valA = isNaN(cellA) ? cellA.toLowerCase() : parseFloat(cellA);
-                let valB = isNaN(cellB) ? cellB.toLowerCase() : parseFloat(cellB);
-                if (valA < valB) return isAscending ? -1 : 1;
-                if (valA > valB) return isAscending ? 1 : -1;
-                return 0;
-            });
-            rows.forEach(row => tbody.appendChild(row));
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
+        function toggleChat() { document.getElementById('chatBox').style.display = (document.getElementById('chatBox').style.display === 'flex') ? 'none' : 'flex'; }
+
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const msg = input.value; if(!msg) return;
+            appendMsg(msg, 'user'); input.value = '';
+            setTimeout(() => {
+                let res = "عذراً، لم أفهم سؤالك. هل تسأل عن (المديونيات) أو (الشيفتات)؟";
+                if(msg.includes('مديون')) res = "يوجد حالياً " + <%= stats.highWallet %> + " مديونية فوق الـ 1000 ج.م. أنصح بالتواصل معهم فوراً.";
+                if(msg.includes('شيفت')) res = "عدد الحاجزين هو " + <%= stats.withShifts %> + " ونسبة الالتزام بالحجز هي " + ((<%= stats.withShifts %>/<%= stats.total %>)*100).toFixed(1) + "%.";
+                if(msg.includes('نصيحة')) res = "نصيحتي لك: ركز على المندوبين اللي معندهمش شيفتات وعددهم " + <%= stats.noShifts %> + " لزيادة قوة الزون.";
+                appendMsg(res, 'bot');
+            }, 800);
         }
 
-        function filterTable(type) {
-            const rows = document.querySelectorAll('#tbl tbody tr');
-            rows.forEach(row => {
+        function appendMsg(t, s) {
+            const c = document.getElementById('chatMessages');
+            const d = document.createElement('div'); d.className = `msg ${s}`; d.innerText = t;
+            c.appendChild(d); c.scrollTop = c.scrollHeight;
+        }
+
+        function applyFilter(f, el) {
+            document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            document.querySelectorAll('.rider-row').forEach(row => {
                 const w = parseFloat(row.dataset.wallet) || 0;
                 const s = parseFloat(row.dataset.shifts) || 0;
-                if(type === 'all') row.style.display = '';
-                else if(type === 'hasShift') row.style.display = s > 0 ? '' : 'none';
-                else if(type === 'noShift') row.style.display = s === 0 ? '' : 'none';
-                else if(type === 'highWallet') row.style.display = w > 1000 ? '' : 'none';
+                if (f === 'all') row.style.display = '';
+                else if (f === 'hasShift') row.style.display = s > 0 ? '' : 'none';
+                else if (f === 'noShift') row.style.display = s === 0 ? '' : 'none';
+                else if (f === 'highWallet') row.style.display = w > 1000 ? '' : 'none';
             });
         }
 
-        window.onload = function() {
-            if (<%= stats.highWallet %> > 0) {
-                document.getElementById('toast-alert').style.display = 'block';
-                setTimeout(() => document.getElementById('toast-alert').style.display = 'none', 5000);
-            }
-        };
+        function smartSort(n) {
+            const table = document.getElementById("tbl");
+            let rows = Array.from(table.querySelectorAll("tbody tr"));
+            let dir = table.getAttribute("data-sort-dir") === "asc" ? "desc" : "asc";
+            table.setAttribute("data-sort-dir", dir);
+            rows.sort((a, b) => {
+                let x = a.cells[n].innerText.replace(/[^\d.-]/g, '');
+                let y = b.cells[n].innerText.replace(/[^\d.-]/g, '');
+                if(isNaN(parseFloat(x))) { x = a.cells[n].innerText.toLowerCase(); y = b.cells[n].innerText.toLowerCase(); }
+                else { x = parseFloat(x); y = parseFloat(y); }
+                return dir === "asc" ? (x > y ? 1 : -1) : (x < y ? 1 : -1);
+            });
+            rows.forEach(r => document.getElementById("tableBody").appendChild(r));
+        }
     </script>
 </body>
 </html>
