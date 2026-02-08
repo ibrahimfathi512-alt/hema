@@ -15,6 +15,7 @@
             --success: #22c55e;
             --danger: #ef4444;
             --warning: #f1c40f;
+            --sidebar-width: 260px;
         }
 
         body {
@@ -27,9 +28,9 @@
             overflow-x: hidden;
         }
 
-        /* Sidebar Glass Effect */
+        /* Sidebar Responsive */
         .sidebar {
-            width: 260px;
+            width: var(--sidebar-width);
             background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(20px);
             border-left: 1px solid var(--glass-border);
@@ -39,10 +40,12 @@
             position: fixed;
             height: 100vh;
             right: 0;
+            top: 0;
             z-index: 1000;
+            transition: transform 0.3s ease;
         }
 
-        .sidebar h2 { color: var(--primary); text-align: center; margin-bottom: 30px; text-shadow: 0 0 20px rgba(255,94,0,0.3); }
+        .sidebar h2 { color: var(--primary); text-align: center; margin-bottom: 30px; text-shadow: 0 0 20px rgba(255,94,0,0.3); font-size: 1.5rem; }
 
         .nav-item {
             color: #94a3b8;
@@ -54,14 +57,66 @@
             align-items: center;
             gap: 12px;
             transition: 0.3s ease;
+            white-space: nowrap;
         }
 
         .nav-item:hover, .nav-item.active { background: rgba(255, 94, 0, 0.1); color: var(--primary); transform: translateX(-5px); }
 
-        /* Main Content Area */
-        .main-content { margin-right: 260px; flex: 1; padding: 30px; }
+        /* Main Content Area Responsive */
+        .main-content { 
+            margin-right: var(--sidebar-width); 
+            flex: 1; 
+            padding: 20px; 
+            width: calc(100% - var(--sidebar-width));
+            transition: all 0.3s ease;
+        }
 
-        /* Welcome Card */
+        /* Mobile Adjustments */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(100%); /* Hide sidebar on mobile by default */
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-right: 0;
+                width: 100%;
+                padding: 15px;
+            }
+            .welcome-card {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+            .welcome-card div {
+                text-align: center !important;
+            }
+            .clock { font-size: 1.8rem; }
+        }
+
+        /* Menu Button for Mobile */
+        .mobile-nav-toggle {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            box-shadow: 0 4px 15px rgba(255, 94, 0, 0.4);
+            cursor: pointer;
+        }
+        
+        @media (max-width: 992px) {
+            .mobile-nav-toggle { display: flex; }
+        }
+
         .welcome-card {
             background: linear-gradient(135deg, rgba(255,94,0,0.1) 0%, rgba(15, 23, 42, 0) 100%);
             border: 1px solid var(--glass-border);
@@ -76,59 +131,51 @@
         .clock { font-size: 2.2rem; font-weight: 800; color: #fff; }
         .date { color: var(--primary); font-weight: 600; margin-top: 5px; }
 
-        /* Smart Grid */
-        .smart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .smart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-bottom: 30px; }
         .stat-card {
             background: var(--glass);
             border: 1px solid var(--glass-border);
-            padding: 24px;
-            border-radius: 24px;
+            padding: 20px;
+            border-radius: 20px;
             text-align: center;
             transition: 0.4s;
             cursor: pointer;
         }
-        .stat-card:hover { transform: translateY(-10px); border-color: var(--primary); }
-        .stat-card h2 { font-size: 2.8rem; margin: 10px 0; font-weight: 800; }
+        .stat-card h2 { font-size: 1.8rem; margin: 10px 0; font-weight: 800; }
         
-        /* Analytics Grid */
-        .analytics-grid { display: grid; grid-template-columns: 1fr; gap: 20px; margin-bottom: 30px; }
-        .chart-container { background: var(--glass); border: 1px solid var(--glass-border); padding: 25px; border-radius: 24px; height: 350px; }
+        .chart-container { background: var(--glass); border: 1px solid var(--glass-border); padding: 15px; border-radius: 24px; height: 300px; }
 
-        /* Search Section */
-        .search-container { margin-bottom: 20px; position: relative; }
         .search-input {
-            width: 100%; padding: 15px 50px 15px 15px; border-radius: 15px;
+            width: 100%; padding: 12px 45px 12px 15px; border-radius: 12px;
             border: 1px solid var(--glass-border); background: var(--glass);
-            color: white; font-size: 1rem; outline: none; transition: 0.3s;
+            color: white; font-size: 0.9rem; box-sizing: border-box;
         }
-        .search-input:focus { border-color: var(--primary); background: rgba(255,255,255,0.07); }
-        .search-icon { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
 
-        /* Table Style */
-        .table-card { background: var(--glass); border-radius: 24px; overflow: hidden; border: 1px solid var(--glass-border); }
-        table { width: 100%; border-collapse: collapse; }
-        th { 
-            background: rgba(255,255,255,0.05); padding: 18px; font-size: 0.85rem; color: #f8fafc; 
-            cursor: pointer; transition: 0.2s; position: relative;
+        /* Table Responsive */
+        .table-card { 
+            background: var(--glass); 
+            border-radius: 24px; 
+            overflow-x: auto; /* يسمح بالتمرير يميناً ويساراً في الموبايل */
+            border: 1px solid var(--glass-border); 
         }
-        th:hover { background: rgba(255,255,255,0.1); color: var(--primary); }
-        th i { margin-right: 8px; font-size: 0.7rem; opacity: 0.5; }
-        td { padding: 15px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.02); }
+        table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        th { background: rgba(255,255,255,0.05); padding: 15px; font-size: 0.8rem; color: #f8fafc; }
+        td { padding: 12px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.02); font-size: 0.85rem; }
 
-        .locked-badge { background: var(--danger); color: white; padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: bold; }
-
-        /* Toast Alert */
         #toast-alert {
-            position: fixed; bottom: 30px; left: 30px; background: white; color: #000; padding: 20px 30px;
-            border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); display: none; z-index: 10000;
-            border-right: 8px solid var(--danger); animation: slideUp 0.5s ease-out;
+            position: fixed; bottom: 80px; left: 20px; right: 20px; background: white; color: #000; padding: 15px;
+            border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: none; z-index: 10000;
+            border-right: 6px solid var(--danger);
         }
-        @keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
 <body>
 
-    <div class="sidebar">
+    <div class="mobile-nav-toggle" onclick="toggleSidebar()">
+        <i class="fa-solid fa-bars"></i>
+    </div>
+
+    <div class="sidebar" id="sidebar">
         <h2>TALABAT PRO</h2>
         <a href="/dashboard" class="nav-item active"><i class="fa-solid fa-house"></i> الرئيسية</a>
         <a href="/targets" class="nav-item"><i class="fa-solid fa-chart-line"></i> تحليل التارجت</a>
@@ -181,9 +228,9 @@
             </div>
         </div>
 
-        <div class="search-container">
-            <i class="fa-solid fa-magnifying-glass search-icon"></i>
-            <input type="text" id="searchInput" class="search-input" placeholder="بحث باسم المندوب، الكود، أو المحفظة..." onkeyup="searchTable()">
+        <div class="search-container" style="position:relative; margin-bottom: 20px;">
+            <i class="fa-solid fa-magnifying-glass" style="position:absolute; right:15px; top:50%; transform:translateY(-50%); color:#94a3b8;"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="بحث..." onkeyup="searchTable()">
         </div>
 
         <div class="table-card">
@@ -220,17 +267,30 @@
     </div>
 
     <div id="toast-alert">
-        <div style="display:flex; align-items:center; gap:15px;">
-            <i class="fa-solid fa-triangle-exclamation" style="font-size: 2rem; color: var(--danger);"></i>
+        <div style="display:flex; align-items:center; gap:10px;">
+            <i class="fa-solid fa-triangle-exclamation" style="font-size: 1.5rem; color: var(--danger);"></i>
             <div>
-                <strong style="font-size: 1.1rem;">تنبيه المديونيات!</strong><br>
-                <span>يوجد <%= stats.highWallet %> محافظ تتخطى الـ 1000 ج.</span>
+                <strong>تنبيه المديونيات!</strong><br>
+                <span style="font-size: 0.8rem;">يوجد <%= stats.highWallet %> محافظ مديونة.</span>
             </div>
         </div>
     </div>
 
     <script>
-        // تحديث الساعة
+        // فتح واغلاق القائمة في الموبايل
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        // إغلاق السايدبار عند الضغط في أي مكان خارجها (للموبايل)
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.querySelector('.mobile-nav-toggle');
+            if (window.innerWidth <= 992 && !sidebar.contains(event.target) && !toggleBtn.contains(event.target)) {
+                sidebar.classList.remove('active');
+            }
+        });
+
         function updateClock() {
             const now = new Date();
             document.getElementById('clock').innerText = now.toLocaleTimeString('ar-EG');
@@ -239,19 +299,15 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // الرسم البياني
         const ctxMain = document.getElementById('mainChart').getContext('2d');
         new Chart(ctxMain, {
             type: 'bar',
             data: {
-                labels: ['إجمالي القوة', 'حاجزين شيفت', 'بدون شيفت', 'محافظ مقفولة'],
+                labels: ['إجمالي القوة', 'حاجزين', 'بدون شيفت', 'مقفولة'],
                 datasets: [{
-                    label: 'تحليل الزون المباشر',
                     data: [<%= stats.total %>, <%= stats.withShifts %>, <%= stats.noShifts %>, <%= stats.highWallet %>],
-                    backgroundColor: ['rgba(148, 163, 184, 0.4)', 'rgba(34, 197, 94, 0.4)', 'rgba(241, 196, 15, 0.4)', 'rgba(239, 68, 68, 0.4)'],
-                    borderColor: ['#94a3b8', '#22c55e', '#f1c40f', '#ef4444'],
-                    borderWidth: 2,
-                    borderRadius: 12
+                    backgroundColor: ['#94a3b8', '#22c55e', '#f1c40f', '#ef4444'],
+                    borderRadius: 8
                 }]
             },
             options: {
@@ -260,12 +316,11 @@
                 plugins: { legend: { display: false } },
                 scales: {
                     y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
-                    x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+                    x: { ticks: { color: '#94a3b8', font: { size: 10 } } }
                 }
             }
         });
 
-        // وظيفة البحث
         function searchTable() {
             const input = document.getElementById('searchInput');
             const filter = input.value.toLowerCase();
@@ -275,68 +330,41 @@
             });
         }
 
-        // وظيفة الترتيب (Generic Sort)
         let sortDirections = {};
         function sortTable(columnIndex) {
             const table = document.getElementById("tbl");
             const tbody = table.querySelector("tbody");
             const rows = Array.from(tbody.querySelectorAll("tr"));
-            
-            // عكس الاتجاه الحالي
             sortDirections[columnIndex] = !sortDirections[columnIndex];
             const isAscending = sortDirections[columnIndex];
-
             rows.sort((a, b) => {
                 let cellA = a.children[columnIndex].innerText.replace('⚠️ مقفول', '').trim();
                 let cellB = b.children[columnIndex].innerText.replace('⚠️ مقفول', '').trim();
-
-                // تحويل للأرقام إذا كانت الخلية رقمية
                 let valA = isNaN(cellA) ? cellA.toLowerCase() : parseFloat(cellA);
                 let valB = isNaN(cellB) ? cellB.toLowerCase() : parseFloat(cellB);
-
                 if (valA < valB) return isAscending ? -1 : 1;
                 if (valA > valB) return isAscending ? 1 : -1;
                 return 0;
             });
-
             rows.forEach(row => tbody.appendChild(row));
         }
 
-        // ترتيب مخصص للمحفظة (من الأعلى للأقل)
-        function sortByWalletDescending() {
-            const tbody = document.querySelector("#tbl tbody");
-            const rows = Array.from(tbody.querySelectorAll("tr"));
-            
-            rows.sort((a, b) => {
-                return parseFloat(b.dataset.wallet) - parseFloat(a.dataset.wallet);
-            });
-
-            rows.forEach(row => tbody.appendChild(row));
-        }
-
-        // تصفية الجداول
         function filterTable(type) {
-            document.getElementById('searchInput').value = ''; 
             const rows = document.querySelectorAll('#tbl tbody tr');
-            
             rows.forEach(row => {
                 const w = parseFloat(row.dataset.wallet) || 0;
                 const s = parseFloat(row.dataset.shifts) || 0;
-                
                 if(type === 'all') row.style.display = '';
                 else if(type === 'hasShift') row.style.display = s > 0 ? '' : 'none';
                 else if(type === 'noShift') row.style.display = s === 0 ? '' : 'none';
-                else if(type === 'highWallet') {
-                    row.style.display = w > 1000 ? '' : 'none';
-                    sortByWalletDescending(); // ترتيب تلقائي عند اختيار المحافظ المقفولة
-                }
+                else if(type === 'highWallet') row.style.display = w > 1000 ? '' : 'none';
             });
         }
 
         window.onload = function() {
             if (<%= stats.highWallet %> > 0) {
                 document.getElementById('toast-alert').style.display = 'block';
-                setTimeout(() => document.getElementById('toast-alert').style.display = 'none', 6000);
+                setTimeout(() => document.getElementById('toast-alert').style.display = 'none', 5000);
             }
         };
     </script>
