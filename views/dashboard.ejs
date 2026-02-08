@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Talabat Pro | AI Dashboard</title>
+    <title>Talabat Pro | Ultimate AI Dashboard</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -40,7 +40,7 @@
             border-left: 1px solid var(--glass-border); padding: 20px; display: flex;
             flex-direction: column; position: fixed; height: 100vh; right: 0; z-index: 2000;
         }
-        .nav-item { color: var(--text-dim); text-decoration: none; padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 10px; margin-bottom: 5px; font-size: 0.9rem; }
+        .nav-item { color: var(--text-dim); text-decoration: none; padding: 10px 15px; border-radius: 12px; display: flex; align-items: center; gap: 10px; margin-bottom: 5px; font-size: 0.9rem; }
         .nav-item:hover, .nav-item.active { background: rgba(255, 94, 0, 0.1); color: var(--primary); }
 
         /* Main Content */
@@ -49,20 +49,20 @@
         @media (max-width: 992px) {
             .sidebar { transform: translateX(105%); }
             .sidebar.active { transform: translateX(0); }
-            .main-content { margin-right: 0; width: 100%; }
+            .main-content { margin-right: 0; width: 100%; padding: 15px; }
+            .fab-center { display: flex; }
         }
 
-        /* Top Header (Welcome & Clock) */
-        .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; background: var(--card-bg); padding: 20px; border-radius: 20px; border: 1px solid var(--glass-border); }
-        .clock-box { text-align: left; }
-        #clock { font-size: 1.8rem; font-weight: 800; color: var(--primary); }
-        #date { color: var(--text-dim); font-size: 0.9rem; }
+        /* Header & Mini Chart Layout */
+        .header-layout { display: grid; grid-template-columns: 1fr 280px; gap: 20px; margin-bottom: 25px; }
+        .welcome-box { background: var(--card-bg); padding: 20px; border-radius: 20px; border: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; flex: 1; }
+        .small-chart-container { background: var(--card-bg); padding: 15px; border-radius: 20px; border: 1px solid var(--glass-border); height: 180px; display: flex; flex-direction: column; align-items: center; }
 
-        /* Stats Grid */
-        .smart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 20px; }
-        .stat-card { background: var(--card-bg); border: 1px solid var(--glass-border); padding: 20px; border-radius: 20px; text-align: center; cursor: pointer; border-bottom: 4px solid transparent; }
+        /* Stats Cards */
+        .smart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
+        .stat-card { background: var(--card-bg); border: 1px solid var(--glass-border); padding: 15px; border-radius: 18px; text-align: center; cursor: pointer; border-bottom: 4px solid transparent; }
         .stat-card.active { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 10px 25px rgba(255, 94, 0, 0.2); }
-        .stat-card h2 { margin: 8px 0; font-size: 2rem; font-weight: 800; }
+        .stat-card h2 { margin: 8px 0; font-size: 1.8rem; font-weight: 800; }
 
         /* Floating Center Button (Mobile) */
         .fab-center { 
@@ -93,13 +93,17 @@
         @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
         .ticker-item { display: inline-block; margin: 0 25px; font-size: 0.85rem; }
 
-        /* Table Card */
+        /* Table Card & Lock Badge */
         .table-card { background: var(--card-bg); border-radius: 20px; overflow-x: auto; border: 1px solid var(--glass-border); }
         table { width: 100%; border-collapse: collapse; min-width: 1000px; }
         th { padding: 15px; color: var(--primary); background: rgba(0,0,0,0.1); cursor: pointer; text-align: center; font-size: 0.85rem; }
         td { padding: 12px; border-bottom: 1px solid var(--glass-border); text-align: center; font-size: 0.85rem; }
+        .lock-badge { background: var(--danger); color: white; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; display: inline-flex; align-items: center; gap: 5px; }
 
-        @media (max-width: 992px) { .fab-center { display: flex; } }
+        @media (max-width: 992px) { 
+            .header-layout { grid-template-columns: 1fr; }
+            .stat-card h2 { font-size: 1.5rem; }
+        }
         @keyframes pulse-orange { 0% { box-shadow: 0 0 0 0 rgba(255, 94, 0, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(255, 94, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 94, 0, 0); } }
     </style>
 </head>
@@ -111,17 +115,17 @@
     <div class="chat-container" id="chatBox">
         <div class="chat-header"><span>مساعد تطلبات الذكي 🤖</span><i class="fa-solid fa-xmark" onclick="toggleChat()" style="cursor:pointer"></i></div>
         <div class="chat-messages" id="chatMessages">
-            <div class="msg bot">أهلاً بك يا بطل! أنا مساعدك الذكي. يمكنني إخبارك بنسبة الحاجزين، عدد المديونين، أو إعطائك نصائح لتحسين أداء الزون. اسألني أي شيء!</div>
+            <div class="msg bot">أهلاً بك يا بطل! 👋 أنا مساعدك الذكي المعتمد على بيانات الداشبورد حالياً. كيف يمكنني مساعدتك؟</div>
         </div>
         <div class="chat-input">
-            <input type="text" id="userInput" placeholder="اسألني عن المديونيات أو الشفتات..." onkeypress="if(event.key === 'Enter') sendMessage()">
+            <input type="text" id="userInput" placeholder="اسألني عن الزون..." onkeypress="if(event.key === 'Enter') sendMessage()">
             <button onclick="sendMessage()" style="background:var(--primary); border:none; color:white; padding:8px 15px; border-radius:10px; cursor:pointer"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
     </div>
 
     <aside class="sidebar" id="sidebar">
         <h2 style="color:var(--primary); text-align:center; letter-spacing:1px;">TALABAT PRO</h2>
-        <div class="theme-switch" onclick="toggleTheme()" style="cursor:pointer; padding:10px; background:var(--card-bg); border-radius:10px; margin-bottom:15px; display:flex; justify-content:space-between">
+        <div onclick="toggleTheme()" style="cursor:pointer; padding:10px; background:var(--card-bg); border-radius:10px; margin-bottom:15px; display:flex; justify-content:space-between; border: 1px solid var(--glass-border);">
             <span id="themeLabel">الوضع الداكن</span><i id="themeIcon" class="fa-solid fa-moon"></i>
         </div>
         <nav style="flex:1">
@@ -141,14 +145,17 @@
     </aside>
 
     <main class="main-content">
-        <div class="top-header">
-            <div>
-                <h1 style="margin:0; font-size: 1.6rem;">أهلاً بك يا بطل 🚀</h1>
-                <p style="color: var(--text-dim); margin-top: 5px;">إليك ملخص أداء الزون ليومنا هذا</p>
+        <div class="header-layout">
+            <div class="welcome-box">
+                <div>
+                    <h1 style="margin:0; font-size: 1.5rem;">أهلاً بك يا بطل 🚀</h1>
+                    <div id="date" style="color: var(--text-dim); margin-top:5px; font-weight:600;">جاري التحميل...</div>
+                </div>
+                <div id="clock" style="font-size: 1.8rem; font-weight: 800; color: var(--primary);">00:00:00</div>
             </div>
-            <div class="clock-box">
-                <div id="clock">00:00:00</div>
-                <div id="date">جاري التحميل...</div>
+            <div class="small-chart-container">
+                <span style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 5px;">توزيع أداء الزون</span>
+                <canvas id="miniChart"></canvas>
             </div>
         </div>
 
@@ -162,12 +169,26 @@
         <div class="table-card">
             <table id="tbl">
                 <thead>
-                    <tr><% headers.forEach((h, index) => { %><th onclick="smartSort(<%= index %>)"><%= h %></th><% }) %></tr>
+                    <tr><% headers.forEach((h, index) => { %><th onclick="smartSort(<%= index %>)"><%= h %> <i class="fa-solid fa-sort"></i></th><% }) %></tr>
                 </thead>
                 <tbody id="tableBody">
-                    <% riders.forEach(r => { %>
-                    <tr class="rider-row" data-wallet="<%= cleanData(r.get('المحفظه')) %>" data-shifts="<%= cleanData(r.get('شيفتات الغد')) %>">
-                        <% headers.forEach(h => { %> <td><%= r.get(h) || '0' %></td> <% }) %>
+                    <% riders.forEach(r => { 
+                        let wallet = cleanData(r.get('المحفظه'));
+                        let isLocked = wallet > 1000;
+                    %>
+                    <tr class="rider-row" data-wallet="<%= wallet %>" data-shifts="<%= cleanData(r.get('شيفتات الغد')) %>">
+                        <% headers.forEach(h => { 
+                            let val = r.get(h) || '0';
+                            let isW = (h === 'المحفظه');
+                        %>
+                        <td>
+                            <% if(isW && isLocked) { %>
+                                <span class="lock-badge"><i class="fa-solid fa-lock"></i> <%= val %></span>
+                            <% } else { %>
+                                <%= val %>
+                            <% } %>
+                        </td>
+                        <% }) %>
                     </tr>
                     <% }) %>
                 </tbody>
@@ -183,18 +204,18 @@
                 <span class="ticker-item"><i class="fa-solid fa-lightbulb"></i> نصيحة: خلي المناديب تورد بانتظام علشان السوالب متتراكمش عليهم.</span>
                 <span class="ticker-item"><i class="fa-solid fa-clock"></i> نصيحة: خلي المناديب تحجز شيفتاتها بدري لضمان استقرار الزون.</span>
                 <span class="ticker-item"><i class="fa-solid fa-ban"></i> ممنوع: المندوب يحجز الشيفت يومي.. لازم الالتزام بالجدول المخطط.</span>
-                <span class="ticker-item"><i class="fa-solid fa-chart-line"></i> نسبة المندوبين بدون شيفتات اليوم: <%= ((stats.noShifts/stats.total)*100).toFixed(1) %>%.</span>
+                <span class="ticker-item"><i class="fa-solid fa-chart-pie"></i> نسبة الحاجزين حالياً: <%= ((stats.withShifts/stats.total)*100).toFixed(1) %>%.</span>
             </div>
         </div>
     </div>
 
     <script>
-        function updateClock() {
+        // ساعة وتاريخ
+        setInterval(() => {
             const now = new Date();
             document.getElementById('clock').innerText = now.toLocaleTimeString('ar-EG');
             document.getElementById('date').innerText = now.toLocaleDateString('ar-EG', { weekday: 'long', day: 'numeric', month: 'long' });
-        }
-        setInterval(updateClock, 1000); updateClock();
+        }, 1000);
 
         function toggleTheme() {
             const b = document.body;
@@ -205,8 +226,12 @@
         }
 
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
-        function toggleChat() { document.getElementById('chatBox').style.display = (document.getElementById('chatBox').style.display === 'flex') ? 'none' : 'flex'; }
+        function toggleChat() { 
+            const box = document.getElementById('chatBox');
+            box.style.display = (box.style.display === 'flex') ? 'none' : 'flex';
+        }
 
+        // ذكاء اصطناعي مدمج
         function sendMessage() {
             const input = document.getElementById('userInput');
             const msg = input.value; if(!msg) return;
@@ -215,7 +240,7 @@
                 let res = "عذراً، لم أفهم سؤالك. هل تسأل عن (المديونيات) أو (الشيفتات)؟";
                 if(msg.includes('مديون')) res = "يوجد حالياً " + <%= stats.highWallet %> + " مديونية فوق الـ 1000 ج.م. أنصح بالتواصل معهم فوراً.";
                 if(msg.includes('شيفت')) res = "عدد الحاجزين هو " + <%= stats.withShifts %> + " ونسبة الالتزام بالحجز هي " + ((<%= stats.withShifts %>/<%= stats.total %>)*100).toFixed(1) + "%.";
-                if(msg.includes('نصيحة')) res = "نصيحتي لك: ركز على المندوبين اللي معندهمش شيفتات وعددهم " + <%= stats.noShifts %> + " لزيادة قوة الزون.";
+                if(msg.includes('نصيحة')) res = "نصيحتي لك: ركز على المندوبين الذين لم يحجزوا وعددهم " + <%= stats.noShifts %> + " لزيادة قوة الزون.";
                 appendMsg(res, 'bot');
             }, 800);
         }
@@ -225,6 +250,21 @@
             const d = document.createElement('div'); d.className = `msg ${s}`; d.innerText = t;
             c.appendChild(d); c.scrollTop = c.scrollHeight;
         }
+
+        // ميزة: رسم بياني دائري صغير
+        const ctx = document.getElementById('miniChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['حاجزين', 'بدون شيفت', 'مديونية'],
+                datasets: [{
+                    data: [<%= stats.withShifts %>, <%= stats.noShifts %>, <%= stats.highWallet %>],
+                    backgroundColor: ['#22c55e', '#f1c40f', '#ef4444'],
+                    borderWidth: 0
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { display: false } } }
+        });
 
         function applyFilter(f, el) {
             document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('active'));
