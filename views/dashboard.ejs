@@ -32,9 +32,9 @@
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg-gradient); color: var(--text-main); font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; display: flex; overflow-x: hidden; padding-bottom: 90px; }
+        body { background: var(--bg-gradient); color: var(--text-main); font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; display: flex; overflow-x: hidden; padding-bottom: 90px; transition: background 0.3s; }
 
-        /* Sidebar - 9 Pages Included */
+        /* Sidebar */
         .sidebar {
             width: var(--sidebar-width); background: var(--sidebar-bg); backdrop-filter: blur(20px);
             border-left: 1px solid var(--glass-border); padding: 25px; display: flex;
@@ -46,7 +46,6 @@
         .nav-item { color: var(--text-dim); text-decoration: none; padding: 12px 18px; border-radius: 14px; display: flex; align-items: center; gap: 12px; margin-bottom: 5px; font-size: 0.95rem; transition: 0.3s; }
         .nav-item:hover, .nav-item.active { background: rgba(255, 94, 0, 0.15); color: var(--primary); transform: translateX(-8px); }
 
-        /* Theme Toggle */
         .theme-switch { cursor: pointer; padding: 12px; border-radius: 14px; background: var(--card-bg); display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border: 1px solid var(--glass-border); font-weight: bold; }
 
         /* Main Content */
@@ -59,7 +58,7 @@
             .fab-center { display: flex !important; }
         }
 
-        /* Top Header & Chart */
+        /* Top Header */
         .header-layout { display: grid; grid-template-columns: 1fr 300px; gap: 20px; margin-bottom: 25px; }
         .welcome-box { background: var(--card-bg); padding: 25px; border-radius: 28px; border: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; }
         .mini-chart-container { background: var(--card-bg); border: 1px solid var(--glass-border); border-radius: 28px; padding: 15px; height: 180px; text-align: center; }
@@ -70,7 +69,7 @@
         .stat-card.active { border-color: var(--primary); transform: translateY(-8px); box-shadow: 0 10px 25px var(--primary-glow); }
         .stat-card h2 { margin: 10px 0; font-size: 2.2rem; font-weight: 800; }
 
-        /* --- THE MASTER FLOATING BUTTON (+) --- */
+        /* Floating Button */
         .fab-center { 
             position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%); 
             width: 75px; height: 75px; background: linear-gradient(135deg, var(--primary), #ff8533);
@@ -79,9 +78,8 @@
             font-size: 35px; cursor: pointer; border: 4px solid #fff; 
             animation: pulse-orange 2s infinite; transition: 0.3s;
         }
-        .fab-center:active { transform: translateX(-50%) scale(0.9); }
 
-        /* Voice Search & AI UI */
+        /* Search & AI */
         .search-wrapper { position: relative; margin-bottom: 25px; display: flex; gap: 12px; }
         .search-input { flex: 1; padding: 18px 55px; border-radius: 20px; border: 1px solid var(--glass-border); background: var(--card-bg); color: var(--text-main); font-size: 1rem; outline: none; }
         .voice-btn { width: 60px; height: 60px; background: var(--card-bg); border: 1px solid var(--glass-border); border-radius: 20px; color: var(--primary); cursor: pointer; font-size: 1.4rem; display: flex; justify-content: center; align-items: center; }
@@ -90,19 +88,18 @@
         .ai-chat-fab { position: fixed; bottom: 85px; left: 30px; width: 60px; height: 60px; background: #007bff; border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 8000; cursor: pointer; color: white; box-shadow: 0 10px 25px rgba(0,123,255,0.4); }
         .chat-container { position: fixed; bottom: 160px; left: 30px; width: 330px; height: 480px; background: var(--sidebar-bg); border: 1px solid var(--glass-border); border-radius: 28px; display: none; flex-direction: column; z-index: 9000; overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,0.6); }
 
-        /* News Ticker */
-        .news-ticker { position: fixed; bottom: 0; left: 0; width: 100%; background: #000; color: #fff; height: 48px; display: flex; align-items: center; z-index: 9500; border-top: 3px solid var(--primary); overflow: hidden; }
-        .ticker-wrap { flex: 1; overflow: hidden; }
-        .ticker-content { display: inline-block; white-space: nowrap; animation: ticker 60s linear infinite; }
-        .ticker-item { display: inline-block; margin: 0 40px; font-size: 0.9rem; font-weight: 500; }
-        .ticker-item i { color: var(--primary); margin-left: 8px; }
-
-        /* Table & Locked Badge */
+        /* Table */
         .table-card { background: var(--card-bg); border-radius: 28px; overflow-x: auto; border: 1px solid var(--glass-border); box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
         table { width: 100%; border-collapse: collapse; min-width: 1100px; }
         th { padding: 20px; color: var(--primary); background: rgba(0,0,0,0.15); cursor: pointer; text-align: center; font-size: 0.9rem; border-bottom: 2px solid var(--glass-border); }
         td { padding: 16px; border-bottom: 1px solid var(--glass-border); text-align: center; font-size: 0.95rem; }
-        .lock-badge { background: var(--danger); color: white; padding: 6px 14px; border-radius: 12px; font-size: 0.8rem; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4); }
+        .lock-badge { background: var(--danger); color: white; padding: 6px 14px; border-radius: 12px; font-size: 0.8rem; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; }
+
+        /* Ticker */
+        .news-ticker { position: fixed; bottom: 0; left: 0; width: 100%; background: #000; color: #fff; height: 48px; display: flex; align-items: center; z-index: 9500; border-top: 3px solid var(--primary); overflow: hidden; }
+        .ticker-wrap { flex: 1; overflow: hidden; }
+        .ticker-content { display: inline-block; white-space: nowrap; animation: ticker 60s linear infinite; }
+        .ticker-item { display: inline-block; margin: 0 40px; font-size: 0.9rem; }
 
         @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
         @keyframes pulse-orange { 0% { box-shadow: 0 0 0 0 rgba(255, 94, 0, 0.7); } 70% { box-shadow: 0 0 0 20px rgba(255, 94, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 94, 0, 0); } }
@@ -119,7 +116,7 @@
             <span>مساعد تطلبات الذكي 🤖</span><i class="fa-solid fa-xmark" onclick="toggleChat()" style="cursor:pointer"></i>
         </div>
         <div id="chatMessages" style="flex:1; padding:20px; overflow-y:auto; display:flex; flex-direction:column; gap:12px; background: rgba(0,0,0,0.05);">
-            <div style="padding:12px; border-radius:15px; background:rgba(255,255,255,0.05); align-self:flex-start; font-size:0.9rem;">أهلاً بك يا بطل! 👋 أنا مساعدك الذكي. اسألني عن المديونيات أو أداء الزون أو اطلب نصيحة إدارية.</div>
+            <div style="padding:12px; border-radius:15px; background:rgba(255,255,255,0.05); align-self:flex-start; font-size:0.9rem;">أهلاً بك يا بطل! 👋 أنا مساعدك الذكي. اسألني عن المديونيات أو أداء الزون.</div>
         </div>
         <div style="padding:15px; border-top:1px solid var(--glass-border); display:flex; gap:10px;">
             <input type="text" id="userInput" placeholder="اكتب سؤالك هنا..." style="flex:1; background:rgba(0,0,0,0.2); border:1px solid var(--glass-border); border-radius:12px; padding:12px; color:white; outline:none;" onkeypress="if(event.key === 'Enter') sendMessage()">
@@ -139,6 +136,7 @@
             <a href="/reconciliations" class="nav-item"><i class="fa-solid fa-handshake"></i> التصالحات</a>
             <a href="/new-riders" class="nav-item"><i class="fa-solid fa-user-plus"></i> التعيينات</a>
             <a href="/new-riders-responses" class="nav-item"><i class="fa-solid fa-clipboard-check"></i> ردود التعيينات</a>
+            <a href="/uploaded-inquiry" class="nav-item"><i class="fa-solid fa-search"></i> مرفوعين استعلام</a>
             <a href="/rejected-inquiry" class="nav-item"><i class="fa-solid fa-user-xmark"></i> المرفوضين</a>
             <a href="/order-responses" class="nav-item"><i class="fa-solid fa-file-invoice"></i> ردود الأوردات</a>
             <div style="margin:15px 0; border-top:1px solid var(--glass-border);"></div>
@@ -202,20 +200,17 @@
     </main>
 
     <div class="news-ticker">
-        <div style="background:var(--primary); padding:0 20px; height:100%; display:flex; align-items:center; font-weight:800; z-index:10; white-space:nowrap; box-shadow: 10px 0 20px rgba(0,0,0,0.5);">نشرة Talabat Pro</div>
+        <div style="background:var(--primary); padding:0 20px; height:100%; display:flex; align-items:center; font-weight:800; z-index:10; white-space:nowrap;">نشرة Talabat Pro</div>
         <div class="ticker-wrap">
             <div class="ticker-content">
-                <span class="ticker-item"><i class="fa-solid fa-triangle-exclamation"></i> تنبيه: يوجد <%= stats.highWallet %> محافظ مديونة تخطت الـ 1000 ج.م.. التحصيل الفوري مطلوب.</span>
-                <span class="ticker-item"><i class="fa-solid fa-lightbulb"></i> نصيحة: خلي المناديب تورد بانتظام علشان السوالب متتراكمش عليهم وتعطلهم عن الشغل.</span>
-                <span class="ticker-item"><i class="fa-solid fa-calendar-check"></i> نصيحة: شجع المناديب تحجز شيفتاتها بدري علشان تضمن مكانها وتوزع قوة الزون صح.</span>
-                <span class="ticker-item"><i class="fa-solid fa-ban"></i> تذكير: ممنوع المندوب يحجز الشيفت يومي.. الالتزام بالجدول المخطط أسبوعياً هو الأساس.</span>
+                <span class="ticker-item"><i class="fa-solid fa-triangle-exclamation"></i> يوجد <%= stats.highWallet %> محافظ مديونة تخطت الـ 1000 ج.م..</span>
+                <span class="ticker-item"><i class="fa-solid fa-lightbulb"></i> نصيحة: خلي المناديب تورد بانتظام.</span>
                 <span class="ticker-item"><i class="fa-solid fa-chart-pie"></i> نسبة الالتزام بالحجز حالياً: <%= ((stats.withShifts/stats.total)*100).toFixed(1) %>%.</span>
             </div>
         </div>
     </div>
 
     <script>
-        // الساعة والتاريخ المباشر
         function updateDateTime() {
             const now = new Date();
             document.getElementById('clock').innerText = now.toLocaleTimeString('ar-EG');
@@ -223,7 +218,6 @@
         }
         setInterval(updateDateTime, 1000); updateDateTime();
 
-        // التبديل بين الثيمات
         function toggleTheme() {
             const b = document.body;
             const isDark = b.getAttribute('data-theme') !== 'light';
@@ -235,57 +229,47 @@
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
         function toggleChat() { document.getElementById('chatBox').style.display = (document.getElementById('chatBox').style.display === 'flex') ? 'none' : 'flex'; }
 
-        // البحث الصوتي
         function startVoiceSearch() {
             const btn = document.getElementById('voiceBtn');
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) { alert("متصفحك لا يدعم البحث الصوتي."); return; }
+            if (!SpeechRecognition) return;
             const recognition = new SpeechRecognition();
             recognition.lang = 'ar-SA';
             recognition.onstart = () => btn.classList.add('active');
             recognition.onend = () => btn.classList.remove('active');
-            recognition.onresult = (event) => {
-                document.getElementById('searchInput').value = event.results[0][0].transcript;
-                runGlobalSearch();
-            };
+            recognition.onresult = (e) => { document.getElementById('searchInput').value = e.results[0][0].transcript; runGlobalSearch(); };
             recognition.start();
         }
 
-        // الذكاء الاصطناعي
         function sendMessage() {
             const input = document.getElementById('userInput');
-            const msg = input.value.toLowerCase(); if(!msg) return;
+            const msg = input.value.trim(); if(!msg) return;
             appendMsg(msg, 'user'); input.value = '';
             setTimeout(() => {
-                let res = "عذراً يا بطل، اسألني عن (المديونيات)، (الشيفتات)، أو اطلب (نصيحة).";
-                if(msg.includes('مديون')) res = `يوجد حالياً ${<%= stats.highWallet %>} مديونية فوق الـ 1000 ج.م. لازم تحصيل فوري.`;
-                if(msg.includes('شيفت')) res = `عدد الحاجزين هو ${<%= stats.withShifts %>} ونسبة الالتزام بالحجز هي ${((<%= stats.withShifts %>/<%= stats.total %>)*100).toFixed(1)}%.`;
-                if(msg.includes('نصيحة')) res = "نصيحتي لك: ركز على المندوبين الذين لم يحجزوا وعددهم " + <%= stats.noShifts %> + " لرفع كفاءة الزون.";
+                let res = "عذراً يا بطل، اسألني عن (المديونيات) أو (الشيفتات).";
+                if(msg.includes('مديون')) res = `يوجد حالياً ${<%= stats.highWallet %>} مديونية فوق الـ 1000 ج.م.`;
+                if(msg.includes('شيفت')) res = `عدد الحاجزين هو ${<%= stats.withShifts %>}.`;
                 appendMsg(res, 'bot');
             }, 700);
         }
+
         function appendMsg(t, s) {
             const c = document.getElementById('chatMessages');
-            const d = document.createElement('div'); d.className = `msg ${s}`; d.innerText = t; d.style.padding = "10px"; d.style.borderRadius = "12px"; d.style.marginBottom = "8px"; d.style.alignSelf = s === 'bot' ? 'flex-start' : 'flex-end'; d.style.background = s === 'bot' ? 'rgba(255,255,255,0.05)' : 'var(--primary)';
-            c.appendChild(d); c.scrollTop = c.scrollHeight;
+            const d = document.createElement('div');
+            d.style.cssText = `padding:10px; border-radius:12px; margin-bottom:8px; align-self:${s==='bot'?'flex-start':'flex-end'}; background:${s==='bot'?'rgba(255,255,255,0.05)':'var(--primary)'}`;
+            d.innerText = t; c.appendChild(d); c.scrollTop = c.scrollHeight;
         }
 
-        // الرسم البياني المصغر
         const ctx = document.getElementById('miniChart').getContext('2d');
         new Chart(ctx, {
             type: 'doughnut',
             data: {
                 labels: ['حاجزين', 'بدون', 'مديون'],
-                datasets: [{
-                    data: [<%= stats.withShifts %>, <%= stats.noShifts %>, <%= stats.highWallet %>],
-                    backgroundColor: ['#22c55e', '#f1c40f', '#ef4444'],
-                    borderWidth: 0
-                }]
+                datasets: [{ data: [<%= stats.withShifts %>, <%= stats.noShifts %>, <%= stats.highWallet %>], backgroundColor: ['#22c55e', '#f1c40f', '#ef4444'], borderWidth: 0 }]
             },
             options: { responsive: true, maintainAspectRatio: false, cutout: '80%', plugins: { legend: { display: false } } }
         });
 
-        // الفلترة والترتيب
         function applyFilter(f, el) {
             document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('active'));
             el.classList.add('active');
@@ -301,9 +285,7 @@
 
         function runGlobalSearch() {
             const q = document.getElementById('searchInput').value.toLowerCase();
-            document.querySelectorAll('.rider-row').forEach(row => {
-                row.style.display = row.innerText.toLowerCase().includes(q) ? '' : 'none';
-            });
+            document.querySelectorAll('.rider-row').forEach(row => { row.style.display = row.innerText.toLowerCase().includes(q) ? '' : 'none'; });
         }
 
         function smartSort(n) {
