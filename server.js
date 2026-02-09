@@ -449,7 +449,7 @@ app.listen(PORT, () => {
     🚀 Talabat Pro System Started Successfully!
     📍 Mode: Multi-Office Security & Stats Fixed
     📡 Port: ${PORT}
-    🔗 URL:  http://localhost:3000
+    🔗 URL: http://localhost:${PORT}
     =======================================================
     `);
 });
