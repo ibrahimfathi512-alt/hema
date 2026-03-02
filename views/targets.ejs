@@ -10,75 +10,68 @@
         :root {
             --tanta-orange: #ff5e00;
             --main-dark: #0c0c0e;
-            --card-bg: rgba(23, 23, 26, 0.7);
-            --border-color: rgba(255, 255, 255, 0.08);
+            --card-bg: rgba(23, 23, 26, 0.8);
+            --border-color: rgba(255, 255, 255, 0.1);
             --text-muted: #a1a1aa;
             --success: #22c55e;
             --warning: #f1c40f;
             --danger: #ef4444;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition: all 0.3s ease;
         }
 
         body {
             background-color: var(--main-dark);
             background-image: 
-                radial-gradient(circle at 10% 10%, rgba(255, 94, 0, 0.07) 0%, transparent 35%),
-                radial-gradient(circle at 90% 90%, rgba(255, 94, 0, 0.03) 0%, transparent 35%);
+                radial-gradient(circle at top right, rgba(255, 94, 0, 0.1), transparent 400px),
+                radial-gradient(circle at bottom left, rgba(34, 197, 94, 0.05), transparent 400px);
             color: #ffffff;
             font-family: 'Cairo', sans-serif;
             margin: 0;
             padding: 20px 40px;
             min-height: 100vh;
-            line-height: 1.6;
         }
 
-        /* Nav Bar */
+        /* Header Section */
         .nav-header {
             background: var(--card-bg);
-            backdrop-filter: blur(15px);
+            backdrop-filter: blur(20px);
             border: 1px solid var(--border-color);
-            padding: 15px 30px;
-            border-radius: 20px;
+            padding: 20px 35px;
+            border-radius: 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
         }
 
-        .nav-header h2 { 
-            margin: 0; 
-            font-size: 20px; 
-            font-weight: 900; 
-            letter-spacing: 0.5px;
-        }
-
+        .nav-header h2 { margin: 0; font-size: 22px; font-weight: 900; }
+        
         .back-btn {
             text-decoration: none;
             color: #fff;
             background: rgba(255, 255, 255, 0.05);
-            padding: 8px 18px;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 14px;
+            padding: 10px 22px;
+            border-radius: 14px;
+            font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             transition: var(--transition);
             border: 1px solid var(--border-color);
         }
 
         .back-btn:hover { 
             background: var(--tanta-orange);
-            transform: scale(1.05);
             border-color: var(--tanta-orange);
+            transform: translateX(-5px);
         }
 
-        /* Stats Grid */
+        /* Statistics Cards */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
             margin-bottom: 40px;
         }
 
@@ -86,62 +79,53 @@
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             padding: 25px;
-            border-radius: 24px;
+            border-radius: 28px;
             position: relative;
             overflow: hidden;
             transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .stat-card:hover { 
-            border-color: rgba(255, 94, 0, 0.4); 
+            border-color: var(--tanta-orange);
             transform: translateY(-8px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.3);
         }
 
-        .stat-card h4 { 
-            color: var(--text-muted); 
-            margin: 0; 
-            font-size: 13px; 
-            text-transform: uppercase; 
-            font-weight: 600;
-        }
-
-        .stat-card h2 { 
-            margin: 15px 0 5px 0; 
-            font-size: 34px; 
-            font-weight: 900; 
-            color: #fff;
-        }
+        .stat-card h4 { color: var(--text-muted); margin: 0; font-size: 14px; font-weight: 600; z-index: 2; }
+        .stat-card h2 { margin: 12px 0 0 0; font-size: 36px; font-weight: 900; z-index: 2; }
+        .stat-card .unit { font-size: 16px; color: var(--text-muted); font-weight: 400; margin-right: 5px; }
 
         .stat-card i {
             position: absolute;
-            left: -10px;
-            bottom: -10px;
-            font-size: 80px;
-            opacity: 0.05;
+            left: -15px;
+            bottom: -15px;
+            font-size: 90px;
+            opacity: 0.07;
             color: var(--tanta-orange);
             transform: rotate(-15deg);
         }
 
-        /* Table Design */
+        /* Table Section */
         .table-container {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 24px;
+            border-radius: 30px;
             overflow: hidden;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
         }
 
         table { width: 100%; border-collapse: collapse; }
         
         th {
-            background: rgba(255,255,255,0.03);
+            background: rgba(255,255,255,0.04);
             color: var(--tanta-orange);
-            padding: 20px;
+            padding: 22px;
+            font-size: 15px;
+            font-weight: 800;
             text-align: center;
-            font-size: 14px;
-            font-weight: 700;
             border-bottom: 2px solid var(--border-color);
         }
 
@@ -149,111 +133,96 @@
             padding: 20px; 
             text-align: center; 
             border-bottom: 1px solid rgba(255,255,255,0.03); 
+            font-size: 16px;
             font-weight: 600;
-            color: #e4e4e7;
         }
 
-        tr:hover td {
-            background: rgba(255, 255, 255, 0.02);
-            color: #fff;
-        }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: rgba(255,255,255,0.02); }
 
-        /* Progress Bar */
-        .progress-wrapper { 
-            width: 160px; 
-            margin: 0 auto; 
+        /* Progress Visuals */
+        .progress-box { width: 180px; margin: 0 auto; }
+        .pct-label { 
+            display: block; 
+            font-size: 15px; 
+            font-weight: 900; 
+            margin-bottom: 8px; 
         }
 
         .progress-bar {
-            height: 8px;
-            background: rgba(255,255,255,0.05);
+            height: 10px;
+            background: rgba(255,255,255,0.08);
             border-radius: 20px;
             overflow: hidden;
-            margin-top: 8px;
         }
 
         .progress-fill { 
             height: 100%; 
             border-radius: 20px; 
-            transition: width 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            transition: width 1.2s cubic-bezier(0.1, 0.5, 0.5, 1); 
         }
 
-        /* Badges */
+        /* Status Badges */
         .badge {
-            padding: 8px 16px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 700;
+            padding: 10px 18px;
+            border-radius: 15px;
+            font-size: 13px;
+            font-weight: 800;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            min-width: 120px;
+            gap: 10px;
+            min-width: 130px;
             justify-content: center;
         }
 
-        .bg-excellent { 
-            background: rgba(34, 197, 94, 0.1); 
-            color: var(--success); 
-            border: 1px solid rgba(34, 197, 94, 0.2); 
-            box-shadow: 0 0 15px rgba(34, 197, 94, 0.1);
-        }
-        
-        .bg-good { 
-            background: rgba(241, 196, 15, 0.1); 
-            color: var(--warning); 
-            border: 1px solid rgba(241, 196, 15, 0.2); 
-        }
-        
-        .bg-poor { 
-            background: rgba(239, 68, 68, 0.1); 
-            color: var(--danger); 
-            border: 1px solid rgba(239, 68, 68, 0.2); 
-        }
+        .bg-excellent { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
+        .bg-good { background: rgba(241, 196, 15, 0.15); color: #facc15; border: 1px solid rgba(241, 196, 15, 0.3); }
+        .bg-poor { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
 
-        .glow-text-success { 
-            text-shadow: 0 0 20px rgba(34, 197, 94, 0.5); 
-            color: var(--success); 
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
+        @media (max-width: 900px) {
             body { padding: 15px; }
-            .nav-header { flex-direction: column; gap: 15px; text-align: center; }
+            .nav-header { flex-direction: column; gap: 20px; padding: 25px; }
             .stats-grid { grid-template-columns: 1fr; }
-            .table-container { overflow-x: auto; }
+            .progress-box { width: 120px; }
         }
     </style>
 </head>
 <body>
 
     <div class="nav-header">
-        <div style="display: flex; align-items: center; gap: 15px;">
-            <div style="width: 12px; height: 12px; border-radius: 50%; background: var(--tanta-orange); box-shadow: 0 0 15px var(--tanta-orange);"></div>
-            <h2>تحليل أداء الزون: <span style="color: var(--tanta-orange);"><%= zone %></span></h2>
+        <div style="display: flex; align-items: center; gap: 18px;">
+            <div style="width: 15px; height: 15px; border-radius: 50%; background: var(--tanta-orange); box-shadow: 0 0 20px var(--tanta-orange);"></div>
+            <h2>تحليل أداء الزون: <span style="color: var(--tanta-orange); text-transform: uppercase;"><%= zone %></span></h2>
         </div>
         <a href="/dashboard" class="back-btn">
-            <span>العودة للرئيسية</span>
-            <i class="fa-solid fa-arrow-left-long"></i>
+            <span>الرئيسية</span>
+            <i class="fa-solid fa-house-user"></i>
         </a>
     </div>
 
     <div class="stats-grid">
-        <div class="stat-card">
-            <i class="fa-solid fa-bullseye"></i>
-            <h4>التارجت المطلوب</h4>
-            <h2><%= cleanData(zoneData.get('normal Target')) %> <small style="font-size: 14px; color: var(--text-muted);">ساعة</small></h2>
+        <div class="stat-card" style="border-right: 5px solid #3498db;">
+            <i class="fa-solid fa-motorcycle"></i>
+            <h4>مناديب على الطريق (العمل الفعلي)</h4>
+            <h2 style="color: #3498db;">-- <span class="unit">طيار</span></h2>
         </div>
 
         <div class="stat-card">
-            <i class="fa-solid fa-chart-line"></i>
-            <h4>المتوسط الحالي</h4>
-            <h2><%= cleanData(zoneData.get('Average')) %> <small style="font-size: 14px; color: var(--text-muted);">ساعة</small></h2>
+            <i class="fa-solid fa-flag-checkered"></i>
+            <h4>التارجت اليومي المطلوب</h4>
+            <h2><%= cleanData(zoneData.get('normal Target')) %><span class="unit">ساعة</span></h2>
         </div>
 
-        <div class="stat-card" style="border-bottom: 4px solid var(--success);">
-            <i class="fa-solid fa-gauge-high" style="color: var(--success); opacity: 0.1;"></i>
-            <h4>نسبة التحقيق الإجمالية</h4>
-            <h2 class="glow-text-success"><%= zoneData.get('Average %') %></h2>
+        <div class="stat-card">
+            <i class="fa-solid fa-chart-simple"></i>
+            <h4>متوسط الإنجاز الحالي</h4>
+            <h2><%= cleanData(zoneData.get('Average')) %><span class="unit">ساعة</span></h2>
+        </div>
+
+        <div class="stat-card" style="border-bottom: 5px solid var(--success);">
+            <i class="fa-solid fa-bolt"></i>
+            <h4>نسبة تحقيق الزون</h4>
+            <h2 style="color: var(--success);"><%= zoneData.get('Average %') %></h2>
         </div>
     </div>
 
@@ -261,51 +230,34 @@
         <table>
             <thead>
                 <tr>
-                    <th><i class="fa-regular fa-calendar-days" style="margin-left: 8px;"></i>التاريخ</th>
-                    <th><i class="fa-regular fa-clock" style="margin-left: 8px;"></i>الساعات المحققة</th>
-                    <th><i class="fa-solid fa-chart-pie" style="margin-left: 8px;"></i>نسبة الإنجاز</th>
-                    <th><i class="fa-solid fa-ranking-star" style="margin-left: 8px;"></i>حالة الأداء اليومي</th>
+                    <th><i class="fa-regular fa-calendar" style="margin-left: 8px;"></i>التاريخ</th>
+                    <th><i class="fa-regular fa-clock" style="margin-left: 8px;"></i>الساعات المسجلة</th>
+                    <th><i class="fa-solid fa-percent" style="margin-left: 8px;"></i>مؤشر الإنجاز</th>
+                    <th><i class="fa-solid fa-shield-heart" style="margin-left: 8px;"></i>تقييم اليوم</th>
                 </tr>
             </thead>
             <tbody>
                 <% headers.forEach(h => { 
                     if(h.includes('/')) { 
-                        let val = cleanData(zoneData.get(h));
-                        let target = cleanData(zoneData.get('normal Target'));
-                        let pct = (target > 0) ? (val / target * 100) : 0;
+                        let val = parseFloat(cleanData(zoneData.get(h))) || 0;
+                        let target = parseFloat(cleanData(zoneData.get('normal Target'))) || 1;
+                        let pct = (val / target * 100);
                         
-                        let badgeClass = '';
-                        let barColor = '';
-                        let statusText = '';
-                        let icon = '';
+                        let badgeClass, barColor, statusText, icon;
 
-                        if (pct >= 95) { 
-                            badgeClass = 'bg-excellent'; barColor = 'var(--success)'; 
-                            statusText = 'أداء استثنائي'; icon = 'fa-crown'; 
-                        }
-                        else if (pct >= 85) { 
-                            badgeClass = 'bg-excellent'; barColor = 'var(--success)'; 
-                            statusText = 'عاش يا بطل'; icon = 'fa-trophy'; 
-                        }
-                        else if (pct >= 70) { 
-                            badgeClass = 'bg-good'; barColor = 'var(--warning)'; 
-                            statusText = 'أداء مستقر'; icon = 'fa-star'; 
-                        }
-                        else { 
-                            badgeClass = 'bg-poor'; barColor = 'var(--danger)'; 
-                            statusText = 'يحتاج تحسين'; icon = 'fa-triangle-exclamation'; 
-                        }
+                        if (pct >= 95) { badgeClass = 'bg-excellent'; barColor = 'var(--success)'; statusText = 'أداء ملكي'; icon = 'fa-crown'; }
+                        else if (pct >= 80) { badgeClass = 'bg-excellent'; barColor = '#4ade80'; statusText = 'ممتاز جداً'; icon = 'fa-thumbs-up'; }
+                        else if (pct >= 60) { badgeClass = 'bg-good'; barColor = 'var(--warning)'; statusText = 'مستقر'; icon = 'fa-check'; }
+                        else { badgeClass = 'bg-poor'; barColor = 'var(--danger)'; statusText = 'ضعيف'; icon = 'fa-circle-exclamation'; }
                 %>
                 <tr>
-                    <td style="color: var(--text-muted); font-family: 'monospace'; letter-spacing: 1px;"><%= h %></td>
-                    <td style="font-size: 18px; color: #fff;"><%= val %> <small style="font-size: 11px; color: var(--text-muted);">HR</small></td>
+                    <td style="color: var(--text-muted); font-weight: 700;"><%= h %></td>
+                    <td style="font-size: 19px; color: #fff;"><%= val %> <small style="font-size: 12px; opacity: 0.5;">HR</small></td>
                     <td>
-                        <div class="progress-wrapper">
-                            <div style="display:flex; justify-content:space-between; font-size: 12px; margin-bottom: 6px;">
-                                <span style="font-weight: 700;"><%= pct.toFixed(1) %>%</span>
-                            </div>
+                        <div class="progress-box">
+                            <span class="pct-label" style="color: <%= barColor %>;"><%= pct.toFixed(1) %>%</span>
                             <div class="progress-bar">
-                                <div class="progress-fill" style="width: <%= Math.min(pct, 100) %>%; background: <%= barColor %>; box-shadow: 0 0 10px <%= barColor %>88;"></div>
+                                <div class="progress-fill" style="width: <%= Math.min(pct, 100) %>%; background: <%= barColor %>; box-shadow: 0 0 10px <%= barColor %>66;"></div>
                             </div>
                         </div>
                     </td>
@@ -321,9 +273,9 @@
         </table>
     </div>
 
-    <footer style="margin-top: 50px; padding-bottom: 20px; text-align: center; color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.6;">
-        <i class="fa-solid fa-shield-halved" style="margin-left: 5px;"></i> 
-        Tanta Car Fleet Analytics // Internal System v2.6 // 2024
+    <footer style="margin-top: 60px; padding-bottom: 30px; text-align: center; color: var(--text-muted); font-size: 13px; letter-spacing: 1px;">
+        <i class="fa-solid fa-code" style="margin-left: 10px; color: var(--tanta-orange);"></i> 
+        TANTA CAR ELITE ANALYTICS SYSTEM &copy; 2026
     </footer>
 
 </body>
